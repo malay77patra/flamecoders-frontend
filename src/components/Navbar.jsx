@@ -6,7 +6,8 @@ import {
     AlignJustify,
     Github,
     BookOpen,
-    MessageSquareText
+    MessageSquareText,
+    Linkedin
 } from "lucide-react";
 import {
     DropdownMenu,
@@ -33,24 +34,32 @@ function Navbar() {
                         </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="w-72" align="end">
+                    <DropdownMenuContent className="w-64 py-2" align="end">
                         <DropdownMenuGroup>
                             <Link to="/about">
                                 <DropdownMenuItem className="cursor-pointer">
                                     <BookOpen />
-                                    <span>About Us</span>
+                                    <span>About Flamecoders</span>
                                 </DropdownMenuItem>
                             </Link>
-                            <Link to="https://discord.com">
+                            <Link to="https://discord.gg/2kVMzeASj9">
                                 <DropdownMenuItem className="cursor-pointer">
                                     <MessageSquareText />
                                     <span>Discord Server</span>
                                 </DropdownMenuItem>
                             </Link>
-                            <DropdownMenuItem className="cursor-pointer">
-                                <Github />
-                                <span>Github</span>
-                            </DropdownMenuItem>
+                            <Link to="https://github.com/malay77patra">
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <Github />
+                                    <span>Github</span>
+                                </DropdownMenuItem>
+                            </Link>
+                            <Link to="https://www.linkedin.com/in/malaypatra/">
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <Linkedin />
+                                    <span>Linkedin</span>
+                                </DropdownMenuItem>
+                            </Link>
                             <DropdownMenuItem>
                                 <Button onClick={() => navigate("/auth")} className="w-full">Get Started</Button>
                             </DropdownMenuItem>

@@ -3,9 +3,10 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '@/providers/AuthProvider';
+import { ApiProvider } from '@/providers/ApiProvider.jsx';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import '@/styles/index.css';
-import App from './App.jsx';
+import App from '@/App.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -13,7 +14,9 @@ createRoot(document.getElementById('root')).render(
       <Toaster position="bottom-center" />
       <ThemeProvider>
         <AuthProvider >
-          <App />
+          <ApiProvider>
+            <App />
+          </ApiProvider>
         </AuthProvider >
       </ThemeProvider>
     </BrowserRouter>

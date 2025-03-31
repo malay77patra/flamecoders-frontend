@@ -1,10 +1,13 @@
 
 function Home() {
-
   return (
     <>
-      Welcome to Flamecoders!
-      <div>hi</div>
+      <ul>
+        <li>post 1</li>
+        <li>post 1</li>
+        <li>post 1</li>
+        <li>post 1</li>
+      </ul>
     </>
   );
 }
