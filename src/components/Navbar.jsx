@@ -1,24 +1,18 @@
 import Branding from "./Branding";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import {
     AlignJustify,
     Github,
-    BookOpen
+    BookOpen,
+    MessageSquareText
 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuPortal,
-    DropdownMenuSeparator,
-    DropdownMenuShortcut,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -39,13 +33,21 @@ function Navbar() {
                         </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent className="w-56" align="end">
+                    <DropdownMenuContent className="w-72" align="end">
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <BookOpen />
-                                <span>About Us</span>
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <Link to="/about">
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <BookOpen />
+                                    <span>About Us</span>
+                                </DropdownMenuItem>
+                            </Link>
+                            <Link to="https://discord.com">
+                                <DropdownMenuItem className="cursor-pointer">
+                                    <MessageSquareText />
+                                    <span>Discord Server</span>
+                                </DropdownMenuItem>
+                            </Link>
+                            <DropdownMenuItem className="cursor-pointer">
                                 <Github />
                                 <span>Github</span>
                             </DropdownMenuItem>
