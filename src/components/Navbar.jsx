@@ -2,8 +2,8 @@ import Branding from "./Branding";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { AlignJustify } from 'lucide-react';
 import {
+    AlignJustify,
     Github,
     BookOpen
 } from "lucide-react";
