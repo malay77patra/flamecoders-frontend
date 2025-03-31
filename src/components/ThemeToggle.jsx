@@ -6,7 +6,7 @@ function ThemeToggle() {
     const { theme, toggleTheme } = useTheme();
 
     return (
-        <Button size="icon" variant="outline" onClick={toggleTheme}>
+        <Button size="icon" variant="ghost" onClick={toggleTheme}>
             <div className="theme-toggle">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className={theme === "dark" ? "active" : ""}>
                     <clipPath id="theme-toggle-clip">
