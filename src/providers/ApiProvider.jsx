@@ -1,71 +1,46 @@
 import { ApiContext } from "@/contexts/ApiContext";
 import { useAuth } from "@/hooks/useAuth";
 import axios from "axios";
-import { useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 
 const ApiProvider = ({ children }) => {
-    const { user, setUser, logout } = useAuth();
-    const navigate = useNavigate();
+    const { auth } = useAuth();
+    const serverURL = import.meta.env.VITE_SERVER_URL;
 
-    const api = useMemo(() => {
-        const instance = axios.create({
-            baseURL: `${import.meta.env.VITE_SERVER_URL}/api`,
-        });
+    const api = axios.create({
+        url: "/api",
+        baseURL: serverURL,
+    });
 
-        instance.interceptors.request.use(
-            (config) => {
-                if (user?.accessToken) {
-                    config.headers.Authorization = `Bearer ${user.accessToken}`;
-                }
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
+    api.interceptors.response.use(
+        (response) => {
+            return response;
+        },
+        async (error) => {
+            const originalRequest = error.config;
 
-        instance.interceptors.response.use(
-            (response) => response,
-            async (error) => {
-                if (error.response?.status === 401) {
-                    try {
-                        const refreshResponse = await axios.post(
-                            `${import.meta.env.VITE_SERVER_URL}/api/user/refresh`,
-                            {},
-                            { withCredentials: true }
-                        );
+            if (error?.response?.status === 401 && !originalRequest._retry) {
+                originalRequest._retry = true;
 
-                        const newAccessToken = refreshResponse.data?.success?.accessToken;
-                        if (!newAccessToken) {
-                            logout();
-                            navigate("/login");
-                            return Promise.reject(new Error("Unauthorized - No access token received"));
-                        }
+                try {
+                    const refreshResponse = await axios.post(`${serverURL}/api/user/refresh`, {}, {
+                        withCredentials: true
+                    });
 
-                        setUser((prevUser) => ({ ...prevUser, accessToken: newAccessToken }));
+                    if (refreshResponse?.data?.success?.accessToken) {
+                        auth.accessToken = refreshResponse.data.success.accessToken;
+                        originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.success.accessToken}`;
 
-                        // Retry the failed request with the new token
-                        return instance({
-                            ...error.config,
-                            headers: {
-                                ...error.config.headers,
-                                Authorization: `Bearer ${newAccessToken}`,
-                            },
-                        });
-                    } catch (refreshError) {
-                        if (refreshError.response?.status === 401) {
-                            logout();
-                            navigate("/login");
-                        }
-                        return Promise.reject(refreshError);
+                        return api(originalRequest);
                     }
+                } catch (refreshError) {
+                    return Promise.reject(refreshError);
                 }
-
-                return Promise.reject(error);
             }
-        );
 
-        return instance;
-    }, [user, setUser, logout, navigate]);
+            return Promise.reject(error);
+        }
+    );
+
 
     return <ApiContext.Provider value={api}>{children}</ApiContext.Provider>;
 };

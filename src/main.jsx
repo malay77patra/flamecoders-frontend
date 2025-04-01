@@ -9,16 +9,16 @@ import '@/styles/index.css';
 import App from '@/App.jsx';
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <Toaster position="bottom-center" />
-      <ThemeProvider>
-        <AuthProvider >
-          <ApiProvider>
-            <App />
-          </ApiProvider>
-        </AuthProvider >
-      </ThemeProvider>
-    </BrowserRouter>
-  </StrictMode>,
+  // <StrictMode>
+  <BrowserRouter>
+    <Toaster position="bottom-center" />
+    <ThemeProvider>
+      <AuthProvider >
+        <ApiProvider>
+          <App />
+        </ApiProvider>
+      </AuthProvider >
+    </ThemeProvider>
+  </BrowserRouter>
+  // </StrictMode>,
 );
