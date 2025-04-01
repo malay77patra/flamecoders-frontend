@@ -26,8 +26,8 @@ const ApiProvider = ({ children }) => {
                         withCredentials: true
                     });
 
-                    if (refreshResponse?.data?.success?.accessToken) {
-                        auth.accessToken = refreshResponse.data.success.accessToken;
+                    if (refreshResponse?.data?.data?.accessToken) {
+                        auth.accessToken = refreshResponse.data.data.accessToken;
                         originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.success.accessToken}`;
 
                         return api(originalRequest);
