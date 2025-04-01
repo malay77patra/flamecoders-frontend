@@ -4,11 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { string, object } from "yup";
 import { useApi } from "@/hooks/useApi";
 import toast from "react-hot-toast";
-
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -18,17 +16,40 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 const loginSchema = object({
-    email: string().email("Invalid email format").required("Email is required"),
-    password: string().required("Password is required").min(6, "Password must be at least 6 characters")
-        .matches(/^[a-zA-Z0-9!@#$%^&*()_+]+$/, "Password can only contain letters, numbers, and special characters")
-}).required();
+    email: string()
+        .trim()
+        .lowercase()
+        .email("Invalid email format")
+        .required("Email is required"),
+    password: string()
+        .trim()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .max(64, "Password must be less than 64 characters")
+        .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{6,}$/,
+            "Password must contain at least one uppercase letter, one number, and one special character"),
+}).strict().required();
 
 const registerSchema = object({
-    name: string().required("Name is required").min(3, "Name must be at least 3 characters"),
-    email: string().email("Invalid email format").required("Email is required"),
-    password: string().required("Password is required").min(6, "Password must be at least 6 characters")
-        .matches(/^[a-zA-Z0-9!@#$%^&*()_+]+$/, "Password can only contain letters, numbers, and special characters")
-}).required();
+    name: string()
+        .trim()
+        .required("Name is required")
+        .min(3, "Name must be at least 3 characters")
+        .max(50, "Name must be less than 50 characters")
+        .matches(/^[A-Za-z\s'-]+$/, "Name can only contain letters, spaces, apostrophes, and hyphens"),
+    email: string()
+        .trim()
+        .lowercase()
+        .email("Invalid email format")
+        .required("Email is required"),
+    password: string()
+        .trim()
+        .required("Password is required")
+        .min(6, "Password must be at least 6 characters")
+        .max(64, "Password must be less than 64 characters")
+        .matches(/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+]).{6,}$/,
+            "Password must contain at least one uppercase letter, one number, and one special character"),
+}).strict().required();
 
 function Auth() {
     const [loading, setLoading] = useState(false);
@@ -45,15 +66,21 @@ function Auth() {
     });
 
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (formData) => {
+        console.log(formData)
         setLoading(true);
         try {
             if (isRegister) {
-                // await api.post("/user/register", data);
-                // toast.success("Registration successful!");
-                toast.success("Shut up bro, page is not done yet!");
+                const { data, error } = await api.post("/user/register", formData);
+                if (error) {
+                    if (error?.message) toast.error(error.message);
+                }
+                if (data) {
+                    toast.success(data.message);
+                }
+
             } else {
-                // const response = await api.post("/user/login", data);
+                // const response = await api.post("/user/login", formData);
                 // if (!response.ok) {
                 //     toast.error("Login unsuccessful!");
                 // }

@@ -6,11 +6,8 @@ function Home() {
 
   useEffect(() => {
     const fetchApi = async () => {
-      await api.get("/..", {
-        headers: {
-          Authorization: "Bearer correct_token"
-        }
-      });
+      const resp = await api.get("/..");
+      console.log(resp)
     }
     fetchApi();
   }, [api]);

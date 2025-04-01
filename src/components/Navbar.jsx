@@ -1,7 +1,8 @@
+import { useAuth } from "@/hooks/useAuth";
 import Branding from "./Branding";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import {
     AlignJustify,
     Github,
@@ -18,13 +19,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function Navbar() {
+    const { auth } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
     return (
         <nav className="sticky top-0 z-50 w-full border-b bg-background/10 backdrop-blur-sm">
             <div className="px-4 py-3 max-w-7xl m-auto flex items-center gap-1">
                 <Branding />
                 <div className="flex-1"></div>
-                <Button className="hidden sm:block" onClick={() => navigate("/auth")}>Get Started</Button>
+                {auth.isAuthenticated && (location.pathname != "/auth") && (
+                    <Button className="hidden sm:block" onClick={() => navigate("/auth")}>Get Started</Button>
+                )}
                 <ThemeToggle />
 
                 <DropdownMenu>
@@ -61,7 +67,13 @@ function Navbar() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuItem>
-                                <Button onClick={() => navigate("/auth")} className="w-full">Get Started</Button>
+                                {!auth.isAuthenticated ? (
+                                    (location.pathname != "/auth") && (
+                                        <Button className="hidden sm:block" onClick={() => navigate("/auth")}>Get Started</Button>
+                                    )
+                                ) : (
+                                    <Button className="w-full">Logout</Button>
+                                )}
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                     </DropdownMenuContent>
