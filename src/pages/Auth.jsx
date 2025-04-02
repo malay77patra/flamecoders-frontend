@@ -3,7 +3,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { string, object } from "yup";
 import { useApi } from "@/hooks/useApi";
+import { useAuth } from "@/hooks/useAuth";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import {
     Form,
     FormControl,
@@ -55,6 +57,8 @@ function Auth() {
     const [loading, setLoading] = useState(false);
     const [isRegister, setIsRegister] = useState(false);
     const api = useApi();
+    const { setUser, auth } = useAuth();
+    const navigate = useNavigate();
 
     const form = useForm({
         resolver: yupResolver(isRegister ? registerSchema : loginSchema),
@@ -67,7 +71,6 @@ function Auth() {
 
 
     const onSubmit = async (formData) => {
-        console.log(formData)
         setLoading(true);
         try {
             if (isRegister) {
@@ -80,11 +83,16 @@ function Auth() {
                 }
 
             } else {
-                // const response = await api.post("/user/login", formData);
-                // if (!response.ok) {
-                //     toast.error("Login unsuccessful!");
-                // }
-                toast.success("Shut up bro, page is not done yet!");
+                const { data, error } = await api.post("/user/login", formData);
+                if (error) {
+                    if (error?.message) toast.error(error.message);
+                }
+                if (data) {
+                    setUser(data.user);
+                    auth.accessToken = data.accessToken;
+                    toast.success(data.message);
+                    navigate("/");
+                }
             }
         } catch (error) {
             toast.error("Something went wrong. Try again later.");

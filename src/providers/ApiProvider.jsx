@@ -1,11 +1,12 @@
 import { ApiContext } from "@/contexts/ApiContext";
 import { useAuth } from "@/hooks/useAuth";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const ApiProvider = ({ children }) => {
     const { auth } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
     const serverURL = import.meta.env.VITE_SERVER_URL;
 
     const api = axios.create({
@@ -34,16 +35,20 @@ const ApiProvider = ({ children }) => {
                         }
                     } catch (refreshError) {
                         if (refreshError?.response?.status === 401) {
-                            navigate("/auth");
-                            return Promise.reject({});
+                            if (location.pathname != "/auth") {
+                                navigate("/auth");
+                                return Promise.reject({});
+                            }
                         }
 
                         console.log("[use-api]", refreshError);
-                        return Promise.reject({ message: refreshError?.response?.data?.error?.message || "Something went wrong!" });
+                        return Promise.reject({ message: error?.response?.data?.error?.message || refreshError?.response?.data?.error?.message || "Something went wrong!" });
                     }
                 } else {
-                    navigate("/auth");
-                    return Promise.reject({});
+                    if (location.pathname != "/auth") {
+                        navigate("/auth");
+                        return Promise.reject({});
+                    }
                 }
             }
 
@@ -55,7 +60,7 @@ const ApiProvider = ({ children }) => {
     const requestHandler = async (method, url, config = {}) => {
         try {
             const response = await api[method](url, config);
-            return { data: response, error: null };
+            return { data: response.data, error: null };
         } catch (error) {
             return { data: null, error };
         }

@@ -5,11 +5,11 @@ class Auth {
     }
 
     get accessToken() {
-        return localStorage.getItem(this._key);
+        return localStorage.getItem(this._key) || "";
     }
 
     set accessToken(newValue) {
-        localStorage.setItem(this._key, newValue);
+        localStorage.setItem(this._key, newValue || "");
     }
 
     get isAuthenticated() {
