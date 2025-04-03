@@ -57,7 +57,7 @@ function Auth() {
     const [loading, setLoading] = useState(false);
     const [isRegister, setIsRegister] = useState(false);
     const api = useApi();
-    const { setUser, auth } = useAuth();
+    const { setUser, setAuthToken } = useAuth();
     const navigate = useNavigate();
 
     const form = useForm({
@@ -74,29 +74,32 @@ function Auth() {
         setLoading(true);
         try {
             if (isRegister) {
-                const { data, error } = await api.post("/user/register", formData);
+                const { data, error } = await api.post("/api/user/register", formData, {
+                    skipAuthRefresh: true
+                });
                 if (error) {
-                    if (error?.message) toast.error(error.message);
-                }
-                if (data) {
-                    toast.success(data.message);
+                    toast.error(error.message);
+                } else {
+                    toast.success("A verification link is sent to your email, please check inbox.");
                 }
 
             } else {
-                const { data, error } = await api.post("/user/login", formData);
+                const { data, error } = await api.post("/api/user/login", formData, {
+                    skipAuthRefresh: true
+                });
+
                 if (error) {
-                    if (error?.message) toast.error(error.message);
-                }
-                if (data) {
+                    toast.error(error.message);
+                } else {
                     setUser(data.user);
-                    auth.accessToken = data.accessToken;
-                    toast.success(data.message);
+                    setAuthToken(data.accessToken);
+                    toast.success("Logged in.");
                     navigate("/");
                 }
             }
-        } catch (error) {
+        } catch (err) {
+            console.error(err);
             toast.error("Something went wrong. Try again later.");
-            console.error(error);
         } finally {
             setLoading(false);
         }

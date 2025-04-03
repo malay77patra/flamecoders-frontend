@@ -22,25 +22,29 @@ function Verify() {
 
   useEffect(() => {
     const verifyToken = async () => {
-      if (!token) {
-        setMessage("Invalid verification link.");
+      setLoading(true);
+      try {
+        if (!token) {
+          setMessage("Invalid verification link.");
+        } else {
+          const { data, error } = await api.post("/api/magic/verify", {
+            token: token,
+          }, {
+            skipAuthRefresh: true
+          });
+
+          if (error) {
+            setMessage(error.message);
+          } else {
+            setMessage("Verification successful 🎉.");
+          }
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error("Something went wrong. Try again later.");
+      } finally {
         setLoading(false);
-        return;
       }
-
-      const { data, error } = await api.post("/api/magic/verify", {
-        token: token,
-      }, {
-        skipAuthRefresh: true
-      });
-
-      if (error) {
-        setMessage(error.message);
-      } else {
-        setMessage("Verification successful 🎉.");
-      }
-
-      setLoading(false);
     };
 
     verifyToken();

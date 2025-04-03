@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
 
 
     useEffect(() => {
-        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("user", JSON.stringify(user ? user : {}));
     }, [user]);
 
     useEffect(() => {
