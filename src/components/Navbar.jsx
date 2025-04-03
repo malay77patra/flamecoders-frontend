@@ -39,9 +39,10 @@ function Navbar() {
             <div className="px-4 py-3 max-w-7xl m-auto flex items-center gap-1">
                 <Branding />
                 <div className="flex-1"></div>
-                {(!isAuthenticated && (location.pathname != "/auth")) ? (
+                {(!isAuthenticated && (location.pathname != "/auth")) && (
                     <Button className="hidden sm:block" onClick={() => navigate("/auth")}>Get Started</Button>
-                ) : (
+                )}
+                {isAuthenticated && (
                     <Button className="hidden sm:block" onClick={() => handleLogout()}>Logout</Button>
                 )}
                 <ThemeToggle />
@@ -80,9 +81,10 @@ function Navbar() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuItem>
-                                {(!isAuthenticated && (location.pathname != "/auth")) ? (
+                                {(!isAuthenticated && (location.pathname != "/auth")) && (
                                     <Button className="w-full" onClick={() => navigate("/auth")}>Get Started</Button>
-                                ) : (
+                                )}
+                                {isAuthenticated && (
                                     <Button className="w-full" onClick={() => handleLogout()}>Logout</Button>
                                 )}
                             </DropdownMenuItem>
