@@ -17,19 +17,32 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import toast from "react-hot-toast";
 
 function Navbar() {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, logoutUser } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            toast.success("Logged out.");
+        } catch (error) {
+            console.log(error);
+            toast.error("Error logging out.");
+        }
+    }
 
     return (
         <nav className="sticky top-0 z-50 w-full border-b bg-background/10 backdrop-blur-sm">
             <div className="px-4 py-3 max-w-7xl m-auto flex items-center gap-1">
                 <Branding />
                 <div className="flex-1"></div>
-                {!isAuthenticated && (location.pathname != "/auth") && (
+                {(!isAuthenticated && (location.pathname != "/auth")) ? (
                     <Button className="hidden sm:block" onClick={() => navigate("/auth")}>Get Started</Button>
+                ) : (
+                    <Button className="hidden sm:block" onClick={() => handleLogout()}>Logout</Button>
                 )}
                 <ThemeToggle />
 
@@ -67,8 +80,10 @@ function Navbar() {
                                 </DropdownMenuItem>
                             </Link>
                             <DropdownMenuItem>
-                                {!isAuthenticated && (location.pathname != "/auth") && (
+                                {(!isAuthenticated && (location.pathname != "/auth")) ? (
                                     <Button className="w-full" onClick={() => navigate("/auth")}>Get Started</Button>
+                                ) : (
+                                    <Button className="w-full" onClick={() => handleLogout()}>Logout</Button>
                                 )}
                             </DropdownMenuItem>
                         </DropdownMenuGroup>

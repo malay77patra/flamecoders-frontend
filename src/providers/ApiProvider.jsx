@@ -13,14 +13,18 @@ const ApiProvider = ({ children }) => {
         headers: { "Content-Type": "application/json" }
     });
 
-    const refreshAuthLogic = (failedRequest) =>
-        axios.post(refreshEndPoint).then((refreshResponse) => {
-            const newToken = refreshResponse.data.accessToken;
+    const refreshAuthLogic = async (failedRequest) => {
+        try {
+            const response = await axios.post(refreshEndPoint);
+            const newToken = response.data.accessToken;
             setAuthToken(newToken);
             failedRequest.response.config.headers["Authorization"] = `Bearer ${newToken}`;
             api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
             return Promise.resolve();
-        });
+        } catch (refreshError) {
+            //
+        }
+    }
 
     createAuthRefreshInterceptor(api, refreshAuthLogic);
 
