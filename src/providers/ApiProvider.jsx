@@ -1,77 +1,52 @@
 import { ApiContext } from "@/contexts/ApiContext";
-import { useAuth } from "@/hooks/useAuth";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
+import createAuthRefreshInterceptor from "axios-auth-refresh";
+import { useAuth } from "@/hooks/useAuth";
 
 const ApiProvider = ({ children }) => {
-    const { auth } = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
     const serverURL = import.meta.env.VITE_SERVER_URL;
+    const refreshEndPoint = `${serverURL}/api/user/refresh`;
+    const { setAuthToken } = useAuth();
 
     const api = axios.create({
-        baseURL: `${serverURL}/api`,
+        baseURL: serverURL,
+        headers: { "Content-Type": "application/json" }
     });
 
-    api.interceptors.response.use(
-        (response) => {
-            return response.data;
-        },
-        async (error) => {
-            const originalRequest = error.config;
+    const refreshAuthLogic = (failedRequest) =>
+        axios.post(refreshEndPoint).then((refreshResponse) => {
+            const newToken = refreshResponse.data.accessToken;
+            setAuthToken(newToken);
+            failedRequest.response.config.headers["Authorization"] = `Bearer ${newToken}`;
+            api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
+            return Promise.resolve();
+        });
 
-            if (error?.response?.status === 401) {
-                if (!originalRequest._retry) {
-                    originalRequest._retry = true;
-                    try {
-                        const refreshResponse = await axios.post(`${serverURL}/api/user/refresh`, {}, {
-                            withCredentials: true
-                        });
+    createAuthRefreshInterceptor(api, refreshAuthLogic);
 
-                        if (refreshResponse?.data?.data?.accessToken) {
-                            auth.accessToken = refreshResponse.data.data.accessToken;
-                            originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.data.accessToken}`;
-                            return api(originalRequest);
-                        }
-                    } catch (refreshError) {
-                        if (refreshError?.response?.status === 401) {
-                            if (location.pathname != "/auth") {
-                                navigate("/auth");
-                                return Promise.reject({});
-                            }
-                        }
-
-                        console.log("[use-api]", refreshError);
-                        return Promise.reject({ message: error?.response?.data?.error?.message || refreshError?.response?.data?.error?.message || "Something went wrong!" });
-                    }
-                } else {
-                    if (location.pathname != "/auth") {
-                        navigate("/auth");
-                        return Promise.reject({});
-                    }
-                }
-            }
-
-            console.log("[use-api]", error);
-            return Promise.reject({ message: error?.response?.data?.error?.message || "Something went wrong!" });
-        }
-    );
-
-    const requestHandler = async (method, url, config = {}) => {
+    const requestHandler = async (method, url, data = null, config = {}) => {
         try {
-            const response = await api[method](url, config);
+            const response = data
+                ? await api[method](url, data, config)
+                : await api[method](url, config);
+
             return { data: response.data, error: null };
         } catch (error) {
-            return { data: null, error };
+            if (axios.isAxiosError(error) && error.response?.data) {
+                return { data: null, error: error.response.data };
+            }
+
+            return { data: null, error: { message: "An unexpected error occurred." } };
         }
     };
 
     const apiWrapper = {
-        get: (url, config) => requestHandler("get", url, config),
-        post: (url, data, config) => requestHandler("post", url, { ...config, data }),
-        put: (url, data, config) => requestHandler("put", url, { ...config, data }),
-        delete: (url, config) => requestHandler("delete", url, config),
+        get: (url, config) => requestHandler("get", url, null, config),
+        post: (url, data, config) => requestHandler("post", url, data, config),
+        put: (url, data, config) => requestHandler("put", url, data, config),
+        delete: (url, config) => requestHandler("delete", url, null, config),
     };
+
 
     return <ApiContext.Provider value={apiWrapper}>{children}</ApiContext.Provider>;
 };

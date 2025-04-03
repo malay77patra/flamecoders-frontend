@@ -1,15 +1,9 @@
 
-
 function Home() {
 
   return (
     <>
-      <ul>
-        <li>post 1</li>
-        <li>post 1</li>
-        <li>post 1</li>
-        <li>post 1</li>
-      </ul>
+      Home page
     </>
   );
 }
