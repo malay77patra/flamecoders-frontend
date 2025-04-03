@@ -2,8 +2,11 @@ import { ApiContext } from "@/contexts/ApiContext";
 import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const ApiProvider = ({ children }) => {
+    const navigate = useNavigate();
     const serverURL = import.meta.env.VITE_SERVER_URL;
     const refreshEndPoint = `${serverURL}/api/user/refresh`;
     const { setAuthToken } = useAuth();
@@ -22,7 +25,13 @@ const ApiProvider = ({ children }) => {
             api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
             return Promise.resolve();
         } catch (refreshError) {
-            //
+            console.log(refreshError)
+            if (axios.isAxiosError(refreshError) && refreshError?.response?.data?.status === 401) {
+                navigate("/auth");
+                return Promise.reject({ message: refreshError.response.data.message });
+            }
+            return Promise.reject();
+
         }
     }
 
@@ -40,7 +49,7 @@ const ApiProvider = ({ children }) => {
                 return { data: null, error: error.response.data };
             }
 
-            return { data: null, error: { message: "An unexpected error occurred." } };
+            return { data: null, error: { message: error?.message || "An unexpected error occurred." } };
         }
     };
 
