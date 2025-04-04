@@ -24,12 +24,8 @@ const ApiProvider = ({ children }) => {
             api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
             return Promise.resolve();
         } catch (refreshError) {
-            console.log(refreshError)
-            if (axios.isAxiosError(refreshError) && refreshError?.response?.data?.status === 401) {
-                navigate("/auth");
-                return Promise.reject({ message: refreshError.response.data.message });
-            }
-            return Promise.reject();
+            console.log("Failed to refresh:", refreshError);
+            return Promise.reject(failedRequest);
 
         }
     }
@@ -44,11 +40,32 @@ const ApiProvider = ({ children }) => {
 
             return { data: response.data, error: null };
         } catch (error) {
-            if (axios.isAxiosError(error) && error.response?.data) {
-                return { data: null, error: error.response.data };
+            // console.log("erorrrrrrrrr", error)
+            // if (axios.isAxiosError(error) && error.status === 401) {
+            //     navigate("/auth");
+            //     return { data: null, error: { message: error?.response?.data?.message || "Please login again." } }
+            // }
+
+            // if (axios.isAxiosError(error) && error.response?.data) {
+            //     return { data: null, error: error.response.data };
+            // }
+
+            // console.log("Unexpected error:", error);
+            // return { data: null, error: { message: "An unexpected error occurred." } };
+
+            if (axios.isAxiosError(error)) {
+                if (error.status === 401) navigate("/auth");
+
+                return {
+                    data: null,
+                    error: error.response?.data || { ...error, message: error.message || "Something went wrong." }
+                };
             }
 
-            return { data: null, error: { message: error?.message || "An unexpected error occurred." } };
+            return {
+                data: null,
+                error: error.message ? error : { ...error, message: "Something went wrong." }
+            };
         }
     };
 

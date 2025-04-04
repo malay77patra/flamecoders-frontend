@@ -1,6 +1,5 @@
 
 function Home() {
-
   return (
     <>
       Home page
