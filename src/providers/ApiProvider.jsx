@@ -17,7 +17,9 @@ const ApiProvider = ({ children }) => {
 
     const refreshAuthLogic = async (failedRequest) => {
         try {
-            const response = await axios.post(refreshEndPoint);
+            const response = await axios.post(refreshEndPoint, {}, {
+                withCredentials: true
+            });
             const newToken = response.data.accessToken;
             setAuthToken(newToken);
             failedRequest.response.config.headers["Authorization"] = `Bearer ${newToken}`;
@@ -40,19 +42,6 @@ const ApiProvider = ({ children }) => {
 
             return { data: response.data, error: null };
         } catch (error) {
-            // 
-            // if (axios.isAxiosError(error) && error.status === 401) {
-            //     navigate("/auth");
-            //     return { data: null, error: { message: error?.response?.data?.message || "Please login again." } }
-            // }
-
-            // if (axios.isAxiosError(error) && error.response?.data) {
-            //     return { data: null, error: error.response.data };
-            // }
-
-            // console.log("Unexpected error:", error);
-            // return { data: null, error: { message: "An unexpected error occurred." } };
-
             if (axios.isAxiosError(error)) {
                 if (error.status === 401) navigate("/auth");
 
