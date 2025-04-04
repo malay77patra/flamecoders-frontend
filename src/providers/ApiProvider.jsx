@@ -40,7 +40,7 @@ const ApiProvider = ({ children }) => {
 
             return { data: response.data, error: null };
         } catch (error) {
-            // console.log("erorrrrrrrrr", error)
+            // 
             // if (axios.isAxiosError(error) && error.status === 401) {
             //     navigate("/auth");
             //     return { data: null, error: { message: error?.response?.data?.message || "Please login again." } }
@@ -56,12 +56,15 @@ const ApiProvider = ({ children }) => {
             if (axios.isAxiosError(error)) {
                 if (error.status === 401) navigate("/auth");
 
-                return {
-                    data: null,
-                    error: error.response?.data || { ...error, message: error.message || "Something went wrong." }
-                };
+                if (error.response?.data) {
+                    return {
+                        data: null,
+                        error: error.response.data
+                    };
+                }
             }
 
+            error._originalMessage = error.message;
             return {
                 data: null,
                 error: error.message ? error : { ...error, message: "Something went wrong." }

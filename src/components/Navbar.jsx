@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { useApi } from "@/hooks/useApi";
 import Branding from "./Branding";
 import ThemeToggle from "./ThemeToggle";
 import { Button } from "@/components/ui/button";
@@ -20,17 +21,42 @@ import {
 import toast from "react-hot-toast";
 
 function Navbar() {
-    const { isAuthenticated, logoutUser } = useAuth();
+    const { authToken, isAuthenticated, setUser, setAuthToken } = useAuth();
+    const api = useApi();
     const navigate = useNavigate();
     const location = useLocation();
 
     const handleLogout = async () => {
-        try {
-            await logoutUser();
+        // const logoutUser = async () => {
+        //     await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/logout`, {}, {
+        //         withCredentials: true,
+        //         headers: {
+        //             Authorization: `Bearer ${authToken}`
+        //         }
+        //     });
+        //     setUser({});
+        //     setAuthToken("");
+        // }
+
+        // try {
+        //     await logoutUser();
+        //     toast.success("Logged out.");
+        // } catch (error) {
+        //     console.log(error);
+        //     toast.error("Error logging out.");
+        // }
+        const { data, error } = await api.post(`${import.meta.env.VITE_SERVER_URL}/api/user/logout`, {}, {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        });
+
+        if (error) {
+            toast.error(error.message);
+        } else {
+            setUser({});
+            setAuthToken("");
             toast.success("Logged out.");
-        } catch (error) {
-            console.log(error);
-            toast.error("Error logging out.");
         }
     }
 

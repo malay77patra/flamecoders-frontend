@@ -1,7 +1,3 @@
-1. done
-2. were testing out auto refreshing by sending test 401 from /login but thats not handling errors properly, see ApiProvider
-```js
-catch (err) {
-    //
-}
-```
+use dat as expired token for testing:
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2VlNzc3ZWVmMTljMzAxMTA3OWU3NWIiLCJlbWFpbCI6Im1hbGF5NzdwYXRyYUBnbWFpbC5jb20iLCJpYXQiOjE3NDM3NDgzNzEsImV4cCI6MTc0Mzc0OTI3MX0.OkWe8TXcRm_GqfmIxdI-K-7o3JSCIR9WsSp51zyl2ko
