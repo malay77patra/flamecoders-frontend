@@ -3,7 +3,6 @@ import axios from "axios";
 import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
 
 const ApiProvider = ({ children }) => {
     const navigate = useNavigate();
