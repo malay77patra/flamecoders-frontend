@@ -27,24 +27,6 @@ function Navbar() {
     const location = useLocation();
 
     const handleLogout = async () => {
-        // const logoutUser = async () => {
-        //     await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/user/logout`, {}, {
-        //         withCredentials: true,
-        //         headers: {
-        //             Authorization: `Bearer ${authToken}`
-        //         }
-        //     });
-        //     setUser({});
-        //     setAuthToken("");
-        // }
-
-        // try {
-        //     await logoutUser();
-        //     toast.success("Logged out.");
-        // } catch (error) {
-        //     console.log(error);
-        //     toast.error("Error logging out.");
-        // }
         const { data, error } = await api.post(`${import.meta.env.VITE_SERVER_URL}/api/user/logout`, {}, {
             headers: {
                 Authorization: `Bearer ${authToken}`
