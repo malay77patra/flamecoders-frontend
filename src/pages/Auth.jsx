@@ -85,7 +85,8 @@ function Auth() {
 
             } else {
                 const { data, error } = await api.post("/api/user/login", formData, {
-                    skipAuthRefresh: false
+                    skipAuthRefresh: false,
+                    withCredentials: true
                 });
 
                 if (error) {
