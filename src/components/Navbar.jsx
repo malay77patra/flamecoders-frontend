@@ -18,7 +18,10 @@ export default function Navbar() {
                 <a className="p-2 text-xl text-primary" href="/">Flamecoders</a>
             </div>
             <div className="flex-none">
-                <button className="btn btn-primary" onclick={() => navigate("/auth")}>Get Started</button>
+                <button className="btn btn-primary" onclick={() => {
+            alert("working");
+            navigate("/auth");
+                }}>Get Started</button>
             </div>
         </div>
     )
