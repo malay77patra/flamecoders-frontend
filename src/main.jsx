@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ApiProvider } from '@/providers/ApiProvider'
 import App from './App.jsx'
+import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,6 +13,7 @@ createRoot(document.getElementById('root')).render(
       <AuthProvider>
         <ApiProvider>
           <App />
+          <Toaster position='bottom-center' />
         </ApiProvider>
       </AuthProvider>
     </BrowserRouter>

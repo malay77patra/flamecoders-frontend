@@ -43,7 +43,7 @@ const ApiProvider = ({ children }) => {
             return { data: response.data, error: null };
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                if (error.status === 401) navigate("/auth");
+                if (!config.skipRedirect && error.status === 401) navigate("/auth");
 
                 if (error.response?.data) {
                     return {

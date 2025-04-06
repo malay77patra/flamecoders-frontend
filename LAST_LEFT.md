@@ -1,0 +1,1 @@
+I was making something that simplifies toast messages, daisy ui doesnt give trigger functions, so i have to make one, i get something intresting in chatgpt, see : https://chatgpt.com/c/67f14227-4868-8002-bc2b-9028ea24f2cd
