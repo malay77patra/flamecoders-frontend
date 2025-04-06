@@ -47,7 +47,7 @@ export default function Navbar() {
             <div className="flex-none">
                 {isAuthenticated ? (
                     <button className="btn btn-error" onClick={handleLogout}>
-                        {loggingOut ? <RLoader /> : "Logout"}
+                        {loggingOut ? <RLoader size="2rem" /> : "Logout"}
                     </button>
                 ) : (
                     <button className="btn btn-primary" onClick={() => navigate("/auth")}>
