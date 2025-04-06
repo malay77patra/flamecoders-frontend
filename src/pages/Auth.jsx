@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { FiMail, FiEye, FiEyeOff } from 'react-icons/fi';
 import { LuKeyRound } from 'react-icons/lu';
+import { useApi } from '@/hooks/useApi';
 
 const registerSchema = yup.object({
     name: yup.string().required('Name is required').min(2).max(50),
@@ -29,7 +30,9 @@ const loginSchema = yup.object({
 
 export default function Auth() {
     const [isLogin, setIsLogin] = useState(true);
+    // const [isLoading, setIsLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const api = useApi();
 
     const {
         register,
@@ -39,8 +42,20 @@ export default function Auth() {
         resolver: yupResolver(isLogin ? loginSchema : registerSchema),
     });
 
-    const onSubmit = (data) => {
-        console.log(isLogin ? 'Logging in...' : 'Registering...', data);
+    const loginUser = async (formData) => {
+        const { data, error } = await api.post("/api/user/login", formData, {
+            skipAuthRefresh: false,
+            withCredentials: true
+        });
+
+        console.log(data, error)
+
+    }
+
+    const onSubmit = (formData) => {
+        if (isLogin) {
+            loginUser(formData);
+        }
     };
 
     return (
@@ -125,7 +140,7 @@ export default function Auth() {
                             {isLogin ? 'Login' : 'Register'}
                         </button>
                         <button
-                            className='btn btn-ghost w-full'
+                            className='btn btn-ghost w-full hover:link'
                             type='button'
                             onClick={() => setIsLogin(!isLogin)}
                         >
