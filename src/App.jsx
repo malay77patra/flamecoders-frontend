@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom'
 import Home from '@/pages/Home'
 import Auth from '@/pages/Auth'
 import Verify from './pages/Verify'
+import Admin from './pages/Admin'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/verify" element={<Verify />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </div>
     </>

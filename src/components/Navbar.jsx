@@ -18,7 +18,7 @@ export default function Navbar() {
         try {
             const { data, error } = await api.post("/api/user/logout", {}, {
                 headers: {
-                    Authorization: authToken
+                    Authorization: `Bearer ${authToken}`
                 }
             });
 

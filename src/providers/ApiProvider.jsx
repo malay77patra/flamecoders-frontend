@@ -4,6 +4,13 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
+const RETRY_CODES = [
+    "NO_ACC_TOKEN",
+    "ACC_USER_NOT_FOUND",
+    "ACC_TOKEN_EXPIRED",
+    "INVALID_ACC_TOKEN"
+]
+
 const ApiProvider = ({ children }) => {
     const navigate = useNavigate();
     const serverURL = import.meta.env.VITE_SERVER_URL;
@@ -32,7 +39,9 @@ const ApiProvider = ({ children }) => {
         }
     }
 
-    createAuthRefreshInterceptor(api, refreshAuthLogic);
+    createAuthRefreshInterceptor(api, refreshAuthLogic, {
+        shouldRefresh: (error) => error.response?.data?.error?.code && RETRY_CODES.includes(error.response.data.error.code)
+    });
 
     const requestHandler = async (method, url, data = null, config = {}) => {
         try {

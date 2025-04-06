@@ -86,7 +86,6 @@ export default function Auth() {
     setIsLoading(true);
     try {
       const { data, error } = await api.post("/api/user/login", formData, {
-        skipAuthRefresh: false,
         withCredentials: true,
       });
 
@@ -109,9 +108,7 @@ export default function Auth() {
   const registerUser = async (formData) => {
     setIsLoading(true);
     try {
-      const { data, error } = await api.post("/api/user/register", formData, {
-        skipAuthRefresh: true,
-      });
+      const { data, error } = await api.post("/api/user/register", formData);
 
       if (error) {
         toast.error(error.message);

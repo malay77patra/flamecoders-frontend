@@ -8,14 +8,24 @@ import App from './App.jsx'
 import { Toaster } from 'react-hot-toast'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <ApiProvider>
-          <App />
-          <Toaster position='bottom-center' />
-        </ApiProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  </StrictMode>,
+  <BrowserRouter>
+    <AuthProvider>
+      <ApiProvider>
+        <App />
+        <Toaster position='bottom-center' />
+      </ApiProvider>
+    </AuthProvider>
+  </BrowserRouter>,
 )
+// createRoot(document.getElementById('root')).render(
+//   <StrictMode>
+//     <BrowserRouter>
+//       <AuthProvider>
+//         <ApiProvider>
+//           <App />
+//           <Toaster position='bottom-center' />
+//         </ApiProvider>
+//       </AuthProvider>
+//     </BrowserRouter>
+//   </StrictMode>,
+// )
