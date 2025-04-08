@@ -14,7 +14,6 @@ export default function Admin() {
     const loginAsAdmin = async () => {
         try {
             const { data, error } = await api.post("/api/admin/login", {}, {
-                skipRedirect: true,
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }

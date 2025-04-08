@@ -21,8 +21,6 @@ function Verify() {
                 } else {
                     const { data, error } = await api.post("/api/magic/verify", {
                         token: token,
-                    }, {
-                        skipRedirect: true,
                     });
 
                     if (error) {

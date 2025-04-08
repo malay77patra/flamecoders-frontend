@@ -4,13 +4,6 @@ import createAuthRefreshInterceptor from "axios-auth-refresh";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-const RETRY_CODES = [
-    "NO_ACC_TOKEN",
-    "ACC_USER_NOT_FOUND",
-    "ACC_TOKEN_EXPIRED",
-    "INVALID_ACC_TOKEN"
-]
-
 const ApiProvider = ({ children }) => {
     const navigate = useNavigate();
     const serverURL = import.meta.env.VITE_SERVER_URL;
@@ -24,49 +17,35 @@ const ApiProvider = ({ children }) => {
 
     const refreshAuthLogic = async (failedRequest) => {
         try {
-            const response = await axios.post(refreshEndPoint, {}, {
-                withCredentials: true
-            });
-            const newToken = response.data.accessToken;
+            const res = await axios.post(refreshEndPoint, {}, { withCredentials: true });
+            const newToken = res.data.accessToken;
             setAuthToken(newToken);
             failedRequest.response.config.headers["Authorization"] = `Bearer ${newToken}`;
-            api.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
             return Promise.resolve();
-        } catch (refreshError) {
-            console.log("Failed to refresh:", refreshError);
-            return Promise.reject(failedRequest);
+            
+        } catch (err) {
+            if (err?.response?.data?.redirect) {
+                navigate("/auth");
+                throw { response: { data: { message: "Please login" } } };
+            }
 
+            throw err;
         }
-    }
+    };
 
     createAuthRefreshInterceptor(api, refreshAuthLogic, {
-        shouldRefresh: (error) => error.response?.data?.error?.code && RETRY_CODES.includes(error.response.data.error.code)
+        shouldRefresh: (err) => err.response?.data?.refresh
     });
 
     const requestHandler = async (method, url, data = null, config = {}) => {
         try {
-            const response = data
+            const res = data
                 ? await api[method](url, data, config)
                 : await api[method](url, config);
-
-            return { data: response.data, error: null };
-        } catch (error) {
-            if (axios.isAxiosError(error)) {
-                if (!config.skipRedirect && error.status === 401) navigate("/auth");
-
-                if (error.response?.data) {
-                    return {
-                        data: null,
-                        error: error.response.data
-                    };
-                }
-            }
-
-            error._originalMessage = error.message;
-            return {
-                data: null,
-                error: error.message ? error : { ...error, message: "Something went wrong." }
-            };
+            return { data: res.data, error: null };
+        } catch (err) {
+            const message = err?.response?.data?.message || "Something went wrong.";
+            return { data: null, error: { message } };
         }
     };
 
@@ -74,9 +53,8 @@ const ApiProvider = ({ children }) => {
         get: (url, config) => requestHandler("get", url, null, config),
         post: (url, data, config) => requestHandler("post", url, data, config),
         put: (url, data, config) => requestHandler("put", url, data, config),
-        delete: (url, config) => requestHandler("delete", url, null, config),
+        delete: (url, config) => requestHandler("delete", url, null, config)
     };
-
 
     return <ApiContext.Provider value={apiWrapper}>{children}</ApiContext.Provider>;
 };
