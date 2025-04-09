@@ -45,7 +45,7 @@ function Verify() {
             {loading ? (
                 <RLoader size="3rem" />
             ) : (
-                <div className="card bg-base-300 w-96 card-lg shadow-lg">
+                <div className="card bg-base-300 w-96 card-lg shadow-md">
                     <div className="card-body">
                         <h2 className="card-title">Email Verification</h2>
                         <p>{message}</p>

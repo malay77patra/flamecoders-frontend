@@ -10,7 +10,7 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <div className='p-4'>
+      <div className='p-2 md:p-4'>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Auth />} />

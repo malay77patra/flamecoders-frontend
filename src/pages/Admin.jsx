@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { useApi } from '@/hooks/useApi';
-import { useAuth } from '@/hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
-import RLoader from '@/components/RLoader';
-import toast from 'react-hot-toast';
+import { useApi } from '@/hooks/useApi'
+import { useAuth } from '@/hooks/useAuth'
+import { useNavigate, useLocation, Link } from 'react-router-dom'
+import RLoader from '@/components/RLoader'
+import toast from 'react-hot-toast'
+import Overview from '@/pages/admin/Overview'
+import Posts from '@/pages/admin/Posts'
+import Admins from '@/pages/admin/Admins'
+
+
 
 export default function Admin() {
-    const [loggingIn, setLoggingIn] = useState(true);
-    const api = useApi();
-    const { isAuthenticated, authToken, user, setUser } = useAuth();
-    const navigate = useNavigate();
+    const [loggingIn, setLoggingIn] = useState(true)
+    const api = useApi()
+    const { isAuthenticated, authToken, user, setUser } = useAuth()
+    const navigate = useNavigate()
+    const location = useLocation()
 
     const loginAsAdmin = async () => {
         try {
@@ -17,32 +23,40 @@ export default function Admin() {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }
-            });
+            })
 
             if (error) {
-                navigate("/");
+                navigate("/")
             } else {
-                setUser({ isAdmin: true, ...user });
+                setUser({ isAdmin: data.isAdmin, ...user })
             }
         } catch (err) {
-            toast.error("Something went wrong!");
+            toast.error("Something went wrong!")
         } finally {
-            setLoggingIn(false);
+            setLoggingIn(false)
         }
     }
-
 
     useEffect(() => {
         if (!user.isAdmin) {
             if (!isAuthenticated) {
-                navigate("/", { replace: true });
+                navigate("/", { replace: true })
             } else {
-                loginAsAdmin();
+                loginAsAdmin()
             }
         } else {
-            setLoggingIn(false);
+            setLoggingIn(false)
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated])
+
+    const getTabFromQuery = () => {
+        const params = new URLSearchParams(location.search)
+        const tab = params.get('tab')
+        return ['admins', 'posts', 'overview'].includes(tab) ? tab : 'overview'
+    }
+
+    const activeTab = getTabFromQuery()
+
 
     return loggingIn ? (
         <div className='flex justify-center pt-20'>
@@ -50,7 +64,16 @@ export default function Admin() {
         </div>
     ) : (
         <>
-            <h1>Hello admin {user.name}!</h1>
+            <div className="tabs tabs-box inline-flex font-semibold">
+                <Link to="?tab=overview" className={`tab ${activeTab === 'overview' ? 'tab-active' : ''}`}>Overview</Link>
+                <Link to="?tab=posts" className={`tab ${activeTab === 'posts' ? 'tab-active' : ''}`}>Posts</Link>
+                <Link to="?tab=admins" className={`tab ${activeTab === 'admins' ? 'tab-active' : ''}`}>Admins</Link>
+            </div>
+            <div className="mt-2">
+                {(activeTab === "overview") && <Overview />}
+                {(activeTab === "posts") && <Posts />}
+                {(activeTab === "admins") && <Admins />}
+            </div>
         </>
-    );
+    )
 }
