@@ -3,7 +3,7 @@ import CustomIcon from "./CustomIcon";
 import Logo from "@/assets/logo.svg?react";
 import { useAuth } from "@/hooks/useAuth";
 import { useApi } from "@/hooks/useApi";
-import toast from "react-hot-toast";
+import {toast} from '@/lib/toast'
 import { useState } from "react";
 import RLoader from "./RLoader";
 import { MdLogout } from "react-icons/md";

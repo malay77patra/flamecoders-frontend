@@ -4,16 +4,17 @@ import Header from '@editorjs/header'
 import { useAuth } from '@/hooks/useAuth'
 import { MdModeEditOutline } from "react-icons/md";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
 import Loading from '@/pages/state/Loading';
 import Error from './state/Error';
-import toast from 'react-hot-toast';
+import { toast } from '@/lib/toast'
 
 
 export default function Post() {
     const { id } = useParams()
     const api = useApi()
+    const navigate = useNavigate()
     const editorRef = useRef(null)
     const { user, authToken } = useAuth()
     const [loading, setLoading] = useState(true)
@@ -92,6 +93,37 @@ export default function Post() {
         }
     }
 
+    const confirmDelete = async () => {
+        const { error, data } = await api.post("/api/post/delete", {
+            id: id
+        }, {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        })
+        if (error) {
+            toast.error(error.message)
+        } else {
+            toast.success(data.message)
+            navigate("/admin?tab=posts")
+        }
+    }
+
+    const handleDelete = () => {
+        toast.confirm(
+            "Are you sure?",
+            "once the post is deleted, it can not be undone.",
+            () => {
+                confirmDelete()
+            },
+            () => { },
+            {
+                position: "center",
+                variant: "danger"
+            }
+        )
+    }
+
     const handleSave = async () => {
         const metadata = await editorRef.current.save();
         const { error, data } = await api.post("/api/post/update", {
@@ -135,7 +167,8 @@ export default function Post() {
                             {editing && (
                                 <button className='btn btn-primary' disabled={!isChanged} onClick={handleSave}>Save</button>
                             )}
-                            <button className={published ? 'btn btn-error' : 'btn btn-accent'} onClick={togglePublish}>{published ? "Unpublish" : "Publish"}</button>
+                            <button className={published ? 'btn btn-primary' : 'btn btn-accent'} onClick={togglePublish}>{published ? "Unpublish" : "Publish"}</button>
+                            <button className='btn btn-error' onClick={handleDelete}>Delete</button>
                         </div>
                     )}
                 </>

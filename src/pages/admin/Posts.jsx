@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { FaPlus } from "react-icons/fa6"
 import { useApi } from '@/hooks/useApi'
 import { useAuth } from '@/hooks/useAuth'
-import toast from 'react-hot-toast'
+import { toast } from '@/lib/toast'
 import { useNavigate } from 'react-router-dom'
 import RLoader from '@/components/RLoader'
 

@@ -7,7 +7,7 @@ import { LuKeyRound } from "react-icons/lu";
 import { useApi } from "@/hooks/useApi";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { toast } from '@/lib/toast'
 import RLoader from "@/components/RLoader";
 
 const registerSchema = yup
