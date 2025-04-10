@@ -37,3 +37,46 @@
     --depth: 0;
     --noise: 0;
 }
+
+/* Editor.js style override */
+
+/* Resolves the max-width limitation in Editor.js components */
+/* Reference: https://github.com/codex-team/editor.js/discussions/1867 */
+
+.ce-block__content,
+.ce-toolbar__content {
+    max-width: unset;
+}
+
+/* Resolves the unstyled header elements inside editor */
+/* Reference: https://github.com/editor-js/header/issues/22 */
+
+h1.ce-header {
+    @apply text-3xl font-bold
+}
+
+h2.ce-header {
+    @apply text-2xl font-semibold
+}
+
+h3.ce-header {
+    @apply text-xl font-semibold
+}
+
+h4.ce-header {
+    @apply text-lg font-semibold
+}
+
+h5.ce-header {
+    @apply text-base font-semibold
+}
+
+h6.ce-header {
+    @apply text-base font-semibold
+}
+
+/* Custom breakpoint for Editorjs */
+
+@theme {
+    --breakpoint-edjs: 40.625rem;
+}

@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useApi } from '@/hooks/useApi'
 import { useAuth } from '@/hooks/useAuth'
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import RLoader from '@/components/RLoader'
 import toast from 'react-hot-toast'
 import Overview from '@/pages/admin/Overview'
 import Posts from '@/pages/admin/Posts'
 import Admins from '@/pages/admin/Admins'
+import Loading from '@/pages/state/Loading'
 
 
 
@@ -59,9 +59,7 @@ export default function Admin() {
 
 
     return loggingIn ? (
-        <div className='flex justify-center pt-20'>
-            <RLoader size='3rem' />
-        </div>
+        <Loading />
     ) : (
         <>
             <div className="tabs tabs-box inline-flex font-semibold">

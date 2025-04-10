@@ -5,6 +5,7 @@ import Home from '@/pages/Home'
 import Auth from '@/pages/Auth'
 import Verify from './pages/Verify'
 import Admin from './pages/Admin'
+import Post from './pages/Post'
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/auth" element={<Auth />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/post/:id" element={<Post />} />
         </Routes>
       </div>
     </>
