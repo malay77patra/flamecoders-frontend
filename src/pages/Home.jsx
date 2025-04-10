@@ -3,9 +3,6 @@ import { toast } from '@/lib/toast'
 
 export default function Home() {
 
-    useEffect(() => {
-        toast.confirm()
-    }, [])
     return (
         <>
             <div>Home</div>
