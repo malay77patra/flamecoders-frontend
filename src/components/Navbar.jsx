@@ -7,7 +7,6 @@ import {toast} from '@/lib/toast'
 import { useState } from "react";
 import RLoader from "./RLoader";
 import { MdLogout } from "react-icons/md";
-import { FaUserAlt } from "react-icons/fa";
 import Avatar from "boring-avatars";
 
 export default function Navbar() {
