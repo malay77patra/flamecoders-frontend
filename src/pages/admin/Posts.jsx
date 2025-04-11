@@ -6,7 +6,6 @@ import { toast } from '@/lib/toast'
 import { useNavigate } from 'react-router-dom'
 import RLoader from '@/components/RLoader'
 import Loading from '../state/Loading'
-import { IoIosArrowDown } from "react-icons/io";
 
 
 const PostsList = () => {
@@ -59,7 +58,7 @@ const DraftsList = () => {
 
   useEffect(() => {
     const fetchDrafts = async () => {
-      const { error, data } = await api.get("/api/post/drafts/1/10", {
+      const { error, data } = await api.get("/api/post/drafts", {
         headers: {
           Authorization: `Bearer ${authToken}`
         }
@@ -121,7 +120,7 @@ export default function Posts() {
     if (error) {
       toast.error(error.message)
     } else {
-      navigate(`/post/${data.id}`)
+      navigate(`/post/${data.id}?edit=true`)
     }
   }
 

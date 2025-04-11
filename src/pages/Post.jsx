@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
+import EditorjsList from '@editorjs/list'
+import Quote from "@cychann/editorjs-quote"
+import InlineCode from '@editorjs/inline-code'
 import { useAuth } from '@/hooks/useAuth'
 import { MdModeEditOutline } from "react-icons/md";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useApi } from '@/hooks/useApi';
 import Loading from '@/pages/state/Loading';
 import Error from './state/Error';
@@ -20,7 +23,9 @@ export default function Post() {
     const { user, authToken } = useAuth()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
-    const [editing, setEditing] = useState(false)
+    const [searchParams] = useSearchParams();
+    const initialEdit = searchParams.get('edit') === 'true';
+    const [editing, setEditing] = useState(initialEdit)
     const [isChanged, setIsChanged] = useState(false)
     const [published, setPublished] = useState(false)
     const [title, setTitle] = useState("")
@@ -37,25 +42,41 @@ export default function Post() {
             if (error) {
                 setError(error.message)
             } else {
-                console.log(data)
                 setTitle(data.title)
                 setPublished(data.published)
                 const editor = new EditorJS({
                     holder: 'editorjs',
-                    autofocus: true,
-                    placeholder: "Start writing...",
+                    placeholder: "Write your post content here...",
                     readOnly: !editing,
-                    inlineToolbar: ['link', 'bold', 'italic'],
                     data: data.metadata,
                     tools: {
                         header: {
                             class: Header,
+                            shortcut: 'CMD+H',
                             config: {
                                 placeholder: 'Enter a header',
                                 levels: [2, 3, 4],
                                 defaultLevel: 2,
                             }
-                        }
+                        },
+                        list: {
+                            class: EditorjsList,
+                            inlineToolbar: true,
+                            config: {
+                                defaultStyle: 'unordered'
+                            },
+                        },
+                        quote: {
+                            class: Quote,
+                            config: {
+                                defaultType: "verticalLine",
+                            },
+                            shortcut: "CMD+Q",
+                        },
+                        inlineCode: {
+                            class: InlineCode,
+                            shortcut: 'CMD+K',
+                        },
                     },
                     onReady: () => {
                         editorRef.current = editor;
@@ -186,25 +207,27 @@ export default function Post() {
                 </>
             )
             }
-            <div className={`mt-4 edjs:py-4 edjs:px-10 ${loading ? "hidden" : ""}`}>
-                <TextareaAutosize
-                    placeholder="Title..."
-                    maxLength={70}
-                    className="resize-none disabled:bg-base-100 text-3xl font-bold outline-0 w-full break-all"
-                    disabled={!editing}
-                    value={title || ""}
-                    onChange={(event) => {
-                        setTitle(event.target.value)
-                        setIsChanged(true)
-                    }}
-                    onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                            event.preventDefault()
-                        }
-                    }}
-                />
-                <div id="editorjs" className='rounded-md'></div>
+            <div className={`mt-8 ${loading ? "hidden" : ""}`}>
+                <div className='max-w-[650px] m-auto'>
+                    <TextareaAutosize
+                        placeholder="New post title here..."
+                        maxLength={70}
+                        className="resize-none disabled:bg-base-100 text-2xl md:text-4xl font-extrabold outline-0 w-full break-all placeholder:text-primary/60"
+                        disabled={!editing}
+                        value={title || ""}
+                        onChange={(event) => {
+                            setTitle(event.target.value)
+                            setIsChanged(true)
+                        }}
+                        onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                                event.preventDefault()
+                            }
+                        }}
+                    />
+                </div>
             </div>
+            <div id="editorjs" className='rounded-md'></div>
         </div >
     )
 }
