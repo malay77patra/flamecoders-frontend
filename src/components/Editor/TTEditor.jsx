@@ -11,10 +11,11 @@ import { EditorContent, useEditor } from '@tiptap/react'
 import React, { useEffect } from 'react'
 import ToolBar from './components/ToolBar'
 
-export default function TTEditor() {
+export default function TTEditor({ metadata = "", setMetadata, setChanged, autoFocus = false }) {
 
   const editor = useEditor({
-    autofocus: true,
+    autofocus: autoFocus,
+    content: metadata,
     extensions: [
       Document,
       Paragraph,
@@ -29,7 +30,11 @@ export default function TTEditor() {
         placeholder: 'Start writing...'
       }),
       History,
-    ]
+    ],
+    onUpdate({ editor }) {
+      setMetadata(editor.getJSON())
+      setChanged(true)
+    }
   })
 
   useEffect(() => {

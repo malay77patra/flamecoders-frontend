@@ -1,38 +1,60 @@
-import React, { useEffect, useRef, useState } from 'react'
-import EditorJS from '@editorjs/editorjs'
-import Header from '@editorjs/header'
-import EditorjsList from '@editorjs/list'
-import Quote from "@cychann/editorjs-quote"
-import InlineCode from '@editorjs/inline-code'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
-import { MdModeEditOutline } from "react-icons/md";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useApi } from '@/hooks/useApi';
-import Loading from '@/pages/state/Loading';
-import Error from './state/Error';
+import { useApi } from '@/hooks/useApi'
+import Loading from '@/pages/state/Loading'
+import Error from './state/Error'
+import TextareaAutosize from 'react-textarea-autosize';
+import TTEditor from '@/components/Editor/TTEditor'
+import RLoader from '@/components/RLoader'
 import { toast } from '@/lib/toast'
-import TextareaAutosize from 'react-textarea-autosize'
-
 
 export default function Post() {
     const { id } = useParams()
+    const { authToken, user } = useAuth()
     const api = useApi()
-    const navigate = useNavigate()
-    const editorRef = useRef(null)
-    const { user, authToken } = useAuth()
+
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState("")
-    const [searchParams] = useSearchParams();
-    const initialEdit = searchParams.get('edit') === 'true';
-    const [editing, setEditing] = useState(initialEdit)
-    const [isChanged, setIsChanged] = useState(false)
-    const [published, setPublished] = useState(false)
+    const [saving, setSaving] = useState(false)
+    const [chnaged, setChanged] = useState(false)
+
     const [title, setTitle] = useState("")
+    const [metadata, setMetadata] = useState({
+        "type": "doc",
+        "content": []
+    })
+
+    const handleSave = async () => {
+        setSaving(true)
+        try {
+
+            const { error, data } = await api.post("/api/post/update", {
+                id: id,
+                title: title,
+                metadata: metadata
+            }, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            })
+
+            if (error) {
+                toast.error(error.message)
+            } else {
+                setChanged(false)
+            }
+        } catch (err) {
+            toast.err("Something went wrong")
+        } finally {
+            setSaving(false)
+        }
+    }
 
     useEffect(() => {
+        if (!id) return
 
-        const loadPost = async () => {
+        const fetchPost = async () => {
             const { error, data } = await api.get(`/api/post/get${user.isAdmin ? "-admin" : ""}/${id}`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -43,191 +65,43 @@ export default function Post() {
                 setError(error.message)
             } else {
                 setTitle(data.title)
-                setPublished(data.published)
-                const editor = new EditorJS({
-                    holder: 'editorjs',
-                    placeholder: "Write your post content here...",
-                    readOnly: !editing,
-                    data: data.metadata,
-                    tools: {
-                        header: {
-                            class: Header,
-                            shortcut: 'CMD+H',
-                            config: {
-                                placeholder: 'Enter a header',
-                                levels: [2, 3, 4],
-                                defaultLevel: 2,
-                            }
-                        },
-                        list: {
-                            class: EditorjsList,
-                            inlineToolbar: true,
-                            config: {
-                                defaultStyle: 'unordered'
-                            },
-                        },
-                        quote: {
-                            class: Quote,
-                            config: {
-                                defaultType: "verticalLine",
-                            },
-                            shortcut: "CMD+Q",
-                        },
-                        inlineCode: {
-                            class: InlineCode,
-                            shortcut: 'CMD+K',
-                        },
-                    },
-                    onReady: () => {
-                        editorRef.current = editor;
-                        setLoading(false)
-                    },
-                    onChange: () => {
-                        setIsChanged(true)
-                    }
-
-                })
+                setMetadata(data.metadata)
             }
+
+            setLoading(false)
         }
 
-        loadPost()
+        fetchPost()
+    }, [id])
 
-        return () => {
-            if (editorRef.current && typeof editorRef.current.destroy === 'function') {
-                editorRef.current.destroy()
-                editorRef.current = null
-            }
-        }
-    }, [])
-
-    const togglePublish = async () => {
-        if (!published && !title) {
-            toast.error("Title is required to publish the post")
-            return
-        }
-        const { error, data } = await api.post("/api/post/publish", {
-            id: id,
-            published: !published
-        }, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
-        })
-        if (error) {
-            toast.error(error.message)
-        } else {
-            setPublished(data.published)
-            toast.success(data.message)
-        }
-    }
-
-    const confirmDelete = async () => {
-        const { error, data } = await api.post("/api/post/delete", {
-            id: id
-        }, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
-        })
-        if (error) {
-            toast.error(error.message)
-        } else {
-            toast.success(data.message)
-            navigate("/admin?tab=posts")
-        }
-    }
-
-    const handleDelete = () => {
-        toast.confirm(
-            "Are you sure?",
-            "once the post is deleted, it can not be undone.",
-            () => {
-                confirmDelete()
-            },
-            () => { },
-            {
-                position: "center",
-                variant: "danger"
-            }
-        )
-    }
-
-    const handleSave = async () => {
-        if (title.trim() === "") {
-            toast.error("Title is required")
-            return
-        }
-        const metadata = await editorRef.current.save();
-        const { error, data } = await api.post("/api/post/update", {
-            id: id,
-            title: title.trim(),
-            metadata: metadata
-        }, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
-        })
-        if (error) {
-            toast.error(error.message)
-        } else {
-            setIsChanged(false)
-            toast.success(data.message)
-        }
-    }
-
-    if (error) {
-        return <Error message={error} />
-    }
+    if (loading) return <Loading />
+    if (error) return <Error message={error} />
 
     return (
         <div>
-            {loading ? (
-                <Loading />
-            ) : (
-                <>
-                    {user.isAdmin && (
-                        <div className='flex gap-2'>
-                            <button className='btn btn-square btn-outline tooltip' data-tip={editing ? "Preview" : "Edit"} onClick={async () => {
-                                const prevState = await editorRef.current.readOnly.toggle();
-                                setEditing(!prevState);
-                            }}>
-                                {editing ? (
-                                    <MdOutlineRemoveRedEye size="1.25rem" />
-                                ) : (
-                                    <MdModeEditOutline size="1.25rem" />
-                                )}
-                            </button>
-                            {editing && (
-                                <button className='btn btn-primary' disabled={!isChanged} onClick={handleSave}>Save</button>
-                            )}
-                            <button className={published ? 'btn btn-primary' : 'btn btn-accent'} onClick={togglePublish}>{published ? "Unpublish" : "Publish"}</button>
-                            <button className='btn btn-error' onClick={handleDelete}>Delete</button>
-                        </div>
-                    )}
-                </>
-            )
-            }
-            <div className={`mt-8 ${loading ? "hidden" : ""}`}>
-                <div className='max-w-[650px] m-auto'>
-                    <TextareaAutosize
-                        placeholder="New post title here..."
-                        maxLength={70}
-                        className="resize-none disabled:bg-base-100 text-2xl md:text-4xl font-extrabold outline-0 w-full break-all placeholder:text-primary/60"
-                        disabled={!editing}
-                        value={title || ""}
-                        onChange={(event) => {
-                            setTitle(event.target.value)
-                            setIsChanged(true)
-                        }}
-                        onKeyDown={(event) => {
-                            if (event.key === "Enter") {
-                                event.preventDefault()
-                            }
-                        }}
-                    />
-                </div>
+            <TextareaAutosize
+                className='resize-none w-full text-3xl font-bold mb-6 outline-0 break-all'
+                placeholder='Your post title here...'
+                maxLength={75}
+                autoFocus={!title}
+                value={title}
+                onChange={ev => {
+                    const noNewlines = ev.target.value.replace(/[\r\n]+/g, ' ')
+                    setTitle(noNewlines)
+                    setChanged(true)
+                }}
+                onKeyDown={ev => {
+                    if (ev.key === 'Enter') {
+                        ev.preventDefault()
+                    }
+                }}
+            />
+            <TTEditor metadata={metadata} setMetadata={setMetadata} setChanged={setChanged} autoFocus={title ? 'end' : false} />
+            <div className='fixed bottom-0 left-0 pb-2 pl-2'>
+                <button className='btn btn-accent' disabled={!chnaged || saving} onClick={handleSave}>
+                    {saving ? <RLoader /> : "Save"}
+                </button>
             </div>
-            <div id="editorjs" className='rounded-md'></div>
-        </div >
+        </div>
     )
 }
