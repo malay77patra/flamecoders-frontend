@@ -8,7 +8,7 @@ import { useApi } from "@/hooks/useApi";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from '@/lib/toast'
-import RLoader from "@/components/RLoader";
+import RadialLoader from "@/components/ui/RadialLoader";
 
 const registerSchema = yup
   .object({
@@ -230,17 +230,12 @@ export default function Auth() {
 
           <div className="card-actions">
             <button className="btn btn-primary w-full" type="submit">
-              {isLoading ? <RLoader size="2rem" /> : isLogin ? "Login" : "Register"}
+              {isLoading ? <RadialLoader size="2rem" /> : isLogin ? "Login" : "Register"}
             </button>
-            <button
-              className="btn btn-ghost w-full hover:link"
-              type="button"
+            <p
+              className="text-center hover:link font-medium"
               onClick={() => setIsLogin(!isLogin)}
-            >
-              {isLogin
-                ? "Don't have an account? Register"
-                : "Already have an account? Login"}
-            </button>
+            >{isLogin ? "Don't have an account? Register" : "Already have an account? Login"}</p>
           </div>
         </div>
       </form>
