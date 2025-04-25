@@ -22,10 +22,10 @@ const ApiProvider = ({ children }) => {
             setAuthToken(newToken);
             failedRequest.response.config.headers["Authorization"] = `Bearer ${newToken}`;
             return Promise.resolve();
-            
+
         } catch (err) {
             if (err?.response?.data?.redirect) {
-                navigate("/auth");
+                navigate("/login");
                 throw { response: { data: { message: "Please login" } } };
             }
 
@@ -53,7 +53,8 @@ const ApiProvider = ({ children }) => {
         get: (url, config) => requestHandler("get", url, null, config),
         post: (url, data, config) => requestHandler("post", url, data, config),
         put: (url, data, config) => requestHandler("put", url, data, config),
-        delete: (url, config) => requestHandler("delete", url, null, config)
+        delete: (url, config) => requestHandler("delete", url, null, config),
+        patch: (url, data, config) => requestHandler("patch", url, data, config)
     };
 
     return <ApiContext.Provider value={apiWrapper}>{children}</ApiContext.Provider>;

@@ -5,7 +5,9 @@ import { toast } from '@/lib/toast'
 import { useState } from "react";
 import RadialLoader from "@/components/ui/RadialLoader";
 import { MdLogout } from "react-icons/md";
+import { IoSettings } from "react-icons/io5";
 import Avatar from "boring-avatars";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
     const [loggingOut, setLoggingOut] = useState(false);
@@ -39,9 +41,9 @@ export default function Navbar() {
     return (
         <div className="bg-base-100 shadow-sm">
             <div className="navbar max-w-7xl m-auto">
-                <div className="flex-1 flex items-center">
-                    <img alt="Logo" src="logo.svg" className="h-8 w-8" />
-                    <a className="text-lg font-semibold text-primary" href="/">
+                <div className="flex-1 flex items-end gap-1">
+                    <img alt="Logo" src="/logo.svg" className="h-8 w-8" />
+                    <a className="text-lg font-semibold text-accent hidden sm:block" href="/">
                         Flamecoders
                     </a>
                 </div>
@@ -55,10 +57,15 @@ export default function Navbar() {
                                         <h2 className="font-bold text-sm">{user.name}</h2>
                                         <h3 className="text-xs opacity-60">{user.email}</h3>
                                     </div>
-                                    <ul className="flex flex-col gap-2 mt-2">
+                                    <ul className="flex flex-col gap-1 mt-2 font-semibold text-base-content/70">
+                                        <li>
+                                            <Link to="/settings">
+                                                <IoSettings /> Settings
+                                            </Link>
+                                        </li>
                                         <li>
                                             <button className="btn btn-error" onClick={handleLogout}>
-                                                {loggingOut ? <RadialLoader size="2rem" /> : (
+                                                {loggingOut ? <RadialLoader /> : (
                                                     <>
                                                         <MdLogout /> Logout
                                                     </>
@@ -70,7 +77,7 @@ export default function Navbar() {
                             </div>
                         </div>
                     ) : (
-                        <button className="btn btn-primary" onClick={() => navigate("/auth")}>
+                        <button className="btn btn-primary" onClick={() => navigate("/login")}>
                             Get Started
                         </button>
                     )}
