@@ -17,19 +17,26 @@ export default function Post() {
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [loadingError, setLoadingError] = useState("")
+    const [isAuthor, setIsAuthor] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
     const { authToken } = useAuth()
 
     const api = useApi()
 
     const fetchPost = async () => {
         try {
-            const { data, error } = await api.get(`/api/post/get/${id}`);
+            const { data, error } = await api.get(`/api/post/get/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            });
 
             if (error) {
                 setLoadingError(error.message)
             } else {
                 setTitle(data.title)
                 setMetadata(data.metadata)
+                setIsAuthor(data.me)
             }
         } catch (err) {
             setLoadingError("Something went wrong!")
@@ -68,6 +75,10 @@ export default function Post() {
         }
     }
 
+    const toggleIsEditing = () => {
+        setIsEditing(!isEditing)
+    }
+
     useEffect(() => {
         if (!id) {
             setLoadingError("404 | POST NOT FOUND")
@@ -83,16 +94,22 @@ export default function Post() {
                 <>
                     {loadingError ? <PageError message={loadingError} /> : (
                         <div className="flex flex-col gap-2">
-                            <div className="flex justify-end">
-                                <button disabled={!chnaged} className="btn btn-accent" onClick={savePost}>
-                                    {saving ? <RadialLoader /> : "Save"}
-                                </button>
-                            </div>
+                            {isAuthor && (
+                                <div className="flex justify-end gap-2">
+                                    <button disabled={!chnaged} className="btn btn-accent" onClick={savePost}>
+                                        {saving ? <RadialLoader /> : "Save"}
+                                    </button>
+                                    <button className="btn" onClick={toggleIsEditing}>
+                                        {isEditing ? "Preview" : "Edit"}
+                                    </button>
+                                </div>
+                            )}
                             <TextareaAutosize
                                 className="outline-none text-3xl font-bold resize-none"
                                 placeholder="Untitled"
                                 maxLength={75}
                                 value={title}
+                                readOnly={!isEditing}
                                 onChange={(event) => {
                                     setTitle(event.target.value)
                                     setChanged(true)
@@ -102,6 +119,8 @@ export default function Post() {
                                 metadata={metadata}
                                 setMetadata={setMetadata}
                                 setChanged={setChanged}
+                                readOnly={!isEditing}
+                                placeholder="Start writing your post..."
                             />
                         </div>
                     )}

@@ -5,9 +5,16 @@ import { toast } from '@/lib/toast'
 import { useState } from "react";
 import RadialLoader from "@/components/ui/RadialLoader";
 import { MdLogout } from "react-icons/md";
-import { IoSettings } from "react-icons/io5";
 import Avatar from "boring-avatars";
-import { Link } from "react-router-dom";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+    DropdownFooter,
+} from "@/components/ui/Dropdown"
 
 export default function Navbar() {
     const [loggingOut, setLoggingOut] = useState(false);
@@ -49,33 +56,33 @@ export default function Navbar() {
                 </div>
                 <div className="flex-none">
                     {isAuthenticated ? (
-                        <div className="flex items-center gap-2">
-                            <div className="dropdown dropdown-end">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="outline-none">
                                 <Avatar name={user.email} className="h-10 w-10 border rounded-full cursor-pointer" tabIndex={0} colors={["#000000", "#9500ff", "#ff005b", "#7e36ba", "#00b5c2"]} />
-                                <div tabIndex={0} className="dropdown-content menu bg-base-100 border rounded-box z-1 w-52 shadow-md mt-1">
-                                    <div className="p-1 pb-2">
-                                        <h2 className="font-bold text-sm">{user.name}</h2>
-                                        <h3 className="text-xs opacity-60">{user.email}</h3>
-                                    </div>
-                                    <ul className="flex flex-col gap-1 mt-2 font-semibold text-base-content/70">
-                                        <li>
-                                            <Link to="/settings">
-                                                <IoSettings /> Settings
-                                            </Link>
-                                        </li>
-                                        <li>
-                                            <button className="btn btn-error" onClick={handleLogout}>
-                                                {loggingOut ? <RadialLoader /> : (
-                                                    <>
-                                                        <MdLogout /> Logout
-                                                    </>
-                                                )}
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>
+                                    <h2>{user.name}</h2>
+                                    <p className="text-xs text-base-content/60">{user.email}</p>
+                                </DropdownMenuLabel>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                    onClick={() => { navigate("/") }}
+                                >Home</DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => { navigate("/settings") }}
+                                >Settings</DropdownMenuItem>
+                                <DropdownFooter>
+                                    <button className="btn btn-error w-full" onClick={handleLogout}>
+                                        {loggingOut ? <RadialLoader /> : (
+                                            <>
+                                                <MdLogout /> Logout
+                                            </>
+                                        )}
+                                    </button>
+                                </DropdownFooter>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     ) : (
                         <button className="btn btn-primary" onClick={() => navigate("/login")}>
                             Get Started

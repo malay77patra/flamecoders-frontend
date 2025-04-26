@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '@/components/ui/Navbar'
 import { Route, Routes } from 'react-router-dom'
+import Authorized from './components/ui/Authorized'
 import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
@@ -16,7 +17,11 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/settings" element={<Settings />} />
+          <Route path="/settings" element={
+            <Authorized>
+              <Settings />
+            </Authorized>
+          } />
           <Route path="/post/:id" element={<Post />} />
         </Routes>
       </div>
