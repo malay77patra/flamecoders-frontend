@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useApi } from "@/hooks/useApi";
-import { toast } from '@/lib/toast'
+import toast from "react-hot-toast";
 import { useState } from "react";
 import RadialLoader from "@/components/ui/RadialLoader";
 import { MdLogout } from "react-icons/md";

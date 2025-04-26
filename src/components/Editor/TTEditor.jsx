@@ -12,7 +12,14 @@ import React, { useEffect } from 'react'
 import ToolBar from './components/ToolBar'
 
 export default function TTEditor({
-  metadata = {},
+  metadata = {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph"
+      }
+    ]
+  },
   setMetadata,
   setChanged,
   autoFocus = false,

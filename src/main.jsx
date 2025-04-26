@@ -10,14 +10,16 @@ import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ApiProvider } from '@/providers/ApiProvider'
 import App from './App.jsx'
-import { ToastProvider } from './components/Toast'
+import { Toaster } from 'react-hot-toast';
+import { Confirmer } from './lib/react-hot-confirmation'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <AuthProvider>
       <ApiProvider>
         <App />
-        <ToastProvider position='bottom-center' />
+        <Toaster position="bottom-center" />
+        <Confirmer />
       </ApiProvider>
     </AuthProvider>
   </BrowserRouter>,

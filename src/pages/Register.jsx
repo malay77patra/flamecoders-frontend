@@ -7,7 +7,7 @@ import { LuKeyRound } from "react-icons/lu";
 import { useApi } from "@/hooks/useApi";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
-import { toast } from '@/lib/toast'
+import toast from "react-hot-toast";
 import RadialLoader from "@/components/ui/RadialLoader";
 import { Link } from "react-router-dom";
 

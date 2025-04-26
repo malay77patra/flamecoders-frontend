@@ -6,7 +6,7 @@ const AuthProvider = ({ children }) => {
         const storedUser = localStorage.getItem("user");
         return storedUser ? JSON.parse(storedUser) : {};
     });
-    const [authToken, setAuthToken] = useState(localStorage.getItem("_authtk"));
+    const [authToken, setAuthToken] = useState(localStorage.getItem("_authtk") || "");
     const isAuthenticated = !!authToken;
 
 
