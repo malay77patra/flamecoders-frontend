@@ -1,11 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { useApi } from "@/hooks/useApi";
-import toast from "react-hot-toast";
-import { useState } from "react";
-import RadialLoader from "@/components/ui/RadialLoader";
-import { MdLogout } from "react-icons/md";
-import Avatar from "boring-avatars";
+import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/hooks/useAuth"
+import { useApi } from "@/hooks/useApi"
+import toast from "react-hot-toast"
+import { useState } from "react"
+import RadialLoader from "@/components/ui/RadialLoader"
+import { MdLogout } from "react-icons/md"
+import Avatar from "boring-avatars"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -15,6 +15,7 @@ import {
     DropdownMenuTrigger,
     DropdownFooter,
 } from "@/components/ui/Dropdown"
+import { SidebarTrigger } from "@/components/ui/Sidebar"
 
 export default function Navbar() {
     const [loggingOut, setLoggingOut] = useState(false);
@@ -47,8 +48,9 @@ export default function Navbar() {
 
     return (
         <div className="bg-base-100 shadow-sm">
-            <div className="navbar max-w-7xl m-auto">
-                <div className="flex-1 flex items-end gap-1">
+            <div className="navbar m-auto gap-2">
+                <SidebarTrigger />
+                <div className="flex-1 flex items-center gap-1">
                     <img alt="Logo" src="/logo.svg" className="h-8 w-8" />
                     <a className="text-lg font-semibold text-accent hidden sm:block" href="/">
                         Flamecoders
@@ -69,6 +71,9 @@ export default function Navbar() {
                                 <DropdownMenuItem
                                     onClick={() => { navigate("/") }}
                                 >Home</DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => { navigate("/dashboard") }}
+                                >Dashboard</DropdownMenuItem>
                                 <DropdownMenuItem
                                     onClick={() => { navigate("/settings") }}
                                 >Settings</DropdownMenuItem>

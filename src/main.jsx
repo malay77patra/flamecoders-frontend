@@ -5,13 +5,13 @@ import '@fontsource/poppins/500.css'
 import '@fontsource/poppins/600.css'
 import '@fontsource/poppins/700.css'
 import { createRoot } from 'react-dom/client'
-import './styles/main.css'
+import '@/styles/main.css'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ApiProvider } from '@/providers/ApiProvider'
-import App from './App.jsx'
+import App from '@/App.jsx'
 import { Toaster } from 'react-hot-toast';
-import { Confirmer } from './lib/react-hot-confirmation'
+import { Confirmer } from '@/lib/react-hot-confirmation'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
