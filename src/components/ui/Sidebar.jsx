@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from 'react'
 import { FiSidebar } from "react-icons/fi"
+import { useIsMobile } from '@/hooks/use-mobile'
 
 const SidebarContext = createContext()
 
@@ -29,13 +30,24 @@ export function SidebarTrigger({ iconSize = "1.25rem" }) {
 
 export function Sidebar({ children }) {
     const { isOpen } = useContext(SidebarContext)
+    const isMobile = useIsMobile();
 
     return (
-        <div className={`h-screen border-r border-base-content/20 overflow-x-hidden transition-all duration-300 ${isOpen ? 'w-64' : 'w-0'}`}>
-            <div className='w-64'>
-                {children}
+        <>
+            {(isMobile && isOpen) && (
+                <div className="bg-black/10 h-screen w-screen fixed top-0 left-0 z-99 flex"></div>
+            )}
+            <div className={`${isMobile ? 'fixed left-0 top-0 z-100' : ''} shrink-0 h-screen bg-base-100 overflow-x-hidden transition-all duration-300 border-r border-base-content/20 flex justify-end ${isOpen ? (isMobile ? 'w-76' : 'w-64') : 'w-0'}`}>
+                <div className='w-64 shrink-0'>
+                    {children}
+                </div>
+                {isMobile && (
+                    <div className='w-12 shrink-0 p-1 box-border'>
+                        <SidebarTrigger />
+                    </div>
+                )}
             </div>
-        </div>
+        </>
 
     )
 }
