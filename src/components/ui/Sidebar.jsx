@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { FiSidebar } from "react-icons/fi"
 import { useIsMobile } from '@/hooks/use-mobile'
+import clsx from 'clsx'
+import { IoIosArrowForward } from "react-icons/io"
 
 const SidebarContext = createContext()
 
@@ -15,6 +17,76 @@ export function SidebarProvider({ children }) {
                 {children}
             </div>
         </SidebarContext.Provider>
+    )
+}
+
+export function SidebarHeader({ children }) {
+
+    return (
+        <div className="p-4 pb-2">
+            {children}
+        </div>
+    )
+}
+
+export function SidebarMenu({ children }) {
+
+    return (
+        <ul>
+            {children}
+        </ul>
+    )
+}
+
+
+export function SidebarMenuItem({ children, className, onClick = () => { } }) {
+    return (
+        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={onClick}>
+            {children}
+        </li>
+    );
+}
+
+
+export function CollapsibleSidebarSubMenu({ children, className, items }) {
+    const [isOpen, setIsOpen] = useState(false)
+
+    const toggleIsOpen = () => {
+        setIsOpen(!isOpen)
+    }
+
+    return (
+        <li>
+            <div className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer flex items-center", className)} onClick={toggleIsOpen}>
+                <div className="flex-1">
+                    {children}
+                </div>
+                <IoIosArrowForward className={`transition-all duration-200 ${isOpen ? 'rotate-90' : 'rotate-0'}`} />
+            </div>
+            {isOpen && (
+                <ul className="border-l border-base-content/20 ml-4 pl-2">
+                    {items}
+                </ul>
+            )}
+        </li>
+    );
+}
+
+export function CollapsibleSidebarSubMenuItem({ children, className, onClick = () => { } }) {
+    return (
+        <li className={clsx("hover:bg-base-content/5 px-2 py-1 text-sm rounded-field cursor-pointer", className)} onClick={onclick}>
+            {children}
+        </li>
+    );
+}
+
+
+export function SidebarContent({ children }) {
+
+    return (
+        <div className="p-2">
+            {children}
+        </div>
     )
 }
 
@@ -56,7 +128,7 @@ export function Sidebar({ children }) {
                 <div className={`h-screen w-screen fixed top-0 left-0 z-99 flex transition-all duration-300 ${(isMobile && isOpen) ? 'bg-black/80' : 'bg-black/0'}`} onClick={toggleSidebar}></div>
             )}
             <div className={`${isMobile ? 'fixed left-0 top-0 z-100' : ''} shrink-0 h-screen bg-base-100 overflow-x-hidden transition-all duration-300 border-r border-base-content/20 flex justify-end ${isOpen ? (isMobile ? 'w-76' : 'w-64') : 'w-0'}`}>
-                <div className='w-64 shrink-0 p-2 box-border'>
+                <div className='w-64 shrink-0 box-border select-none'>
                     {children}
                 </div>
                 {isMobile && (
