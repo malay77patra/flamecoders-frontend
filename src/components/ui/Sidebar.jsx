@@ -40,8 +40,10 @@ export function SidebarMenu({ children }) {
 
 
 export function SidebarMenuItem({ children, className, onClick = () => { } }) {
+    const { toggleSidebar } = useContext(SidebarContext)
+
     return (
-        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={onClick}>
+        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={(e) => { onClick(e); toggleSidebar(); }}>
             {children}
         </li>
     );
@@ -73,8 +75,10 @@ export function CollapsibleSidebarSubMenu({ children, className, items }) {
 }
 
 export function CollapsibleSidebarSubMenuItem({ children, className, onClick = () => { } }) {
+    const { toggleSidebar } = useContext(SidebarContext)
+
     return (
-        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={onClick}>
+        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={(e) => { onClick(e); toggleSidebar(); }}>
             {children}
         </li>
     );

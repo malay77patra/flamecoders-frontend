@@ -1,7 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from '@/components/ui/Navbar'
-import { Sidebar } from '@/components/ui/Sidebar'
-import { SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
+import { Sidebar, SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
 
 export default function DefaultLayout() {
     const navigate = useNavigate()
