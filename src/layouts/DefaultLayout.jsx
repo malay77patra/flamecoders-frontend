@@ -1,9 +1,11 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from '@/components/ui/Navbar'
 import { Sidebar } from '@/components/ui/Sidebar'
 import { SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
 
 export default function DefaultLayout() {
+    const navigate = useNavigate()
+
     return (
         <SidebarProvider>
             <Sidebar>
@@ -12,6 +14,8 @@ export default function DefaultLayout() {
                 </SidebarHeader>
                 <SidebarContent>
                     <SidebarMenu>
+                        <SidebarMenuItem onClick={() => navigate("/")}>Home</SidebarMenuItem>
+                        <SidebarMenuItem onClick={() => navigate("/settings")}>Settings</SidebarMenuItem>
                         <CollapsibleSidebarSubMenu items={
                             <>
                                 <CollapsibleSidebarSubMenuItem>Posts</CollapsibleSidebarSubMenuItem>

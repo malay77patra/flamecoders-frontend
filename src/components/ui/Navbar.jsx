@@ -68,15 +68,6 @@ export default function Navbar() {
                                     <p className="text-xs text-base-content/60">{user.email}</p>
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    onClick={() => { navigate("/") }}
-                                >Home</DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => { navigate("/dashboard") }}
-                                >Dashboard</DropdownMenuItem>
-                                <DropdownMenuItem
-                                    onClick={() => { navigate("/settings") }}
-                                >Settings</DropdownMenuItem>
                                 <DropdownFooter>
                                     <button className="btn btn-error w-full" onClick={handleLogout}>
                                         {loggingOut ? <RadialLoader /> : (

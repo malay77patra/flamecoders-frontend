@@ -64,7 +64,7 @@ export function CollapsibleSidebarSubMenu({ children, className, items }) {
                 <IoIosArrowForward className={`transition-all duration-200 ${isOpen ? 'rotate-90' : 'rotate-0'}`} />
             </div>
             {isOpen && (
-                <ul className="border-l border-base-content/20 ml-4 pl-2">
+                <ul className="border-l border-base-content/20 ml-4 pl-2 flex flex-col">
                     {items}
                 </ul>
             )}
@@ -74,7 +74,7 @@ export function CollapsibleSidebarSubMenu({ children, className, items }) {
 
 export function CollapsibleSidebarSubMenuItem({ children, className, onClick = () => { } }) {
     return (
-        <li className={clsx("hover:bg-base-content/5 px-2 py-1 text-sm rounded-field cursor-pointer", className)} onClick={onclick}>
+        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={onclick}>
             {children}
         </li>
     );
