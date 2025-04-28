@@ -74,7 +74,7 @@ export function CollapsibleSidebarSubMenu({ children, className, items }) {
 
 export function CollapsibleSidebarSubMenuItem({ children, className, onClick = () => { } }) {
     return (
-        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={onclick}>
+        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer", className)} onClick={onClick}>
             {children}
         </li>
     );

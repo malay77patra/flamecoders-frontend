@@ -2,7 +2,7 @@ import { useApi } from "@/hooks/useApi"
 import { useAuth } from "@/hooks/useAuth"
 import { useEffect } from "react"
 
-export default function Dashboard() {
+export default function Posts() {
     const { authToken } = useAuth()
     const api = useApi()
 
@@ -19,8 +19,7 @@ export default function Dashboard() {
     useEffect(() => {
         // fetchMyPosts()
     }, [])
-
     return (
-        <>Dashboard</>
+        <>posts</>
     )
 }

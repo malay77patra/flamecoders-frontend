@@ -51,9 +51,9 @@ export default function Navbar() {
             <div className="navbar m-auto gap-2">
                 <SidebarTrigger />
                 <div className="flex-1 flex items-center gap-1">
-                    <img alt="Logo" src="/logo.svg" className="h-8 w-8" />
-                    <a className="text-lg font-semibold text-accent hidden sm:block" href="/">
-                        Flamecoders
+                    <a className="flex items-center justify-center gap-1" href="/">
+                        <img alt="Logo" src="/logo.svg" className="h-8 w-8" />
+                        <h1 className="text-lg font-semibold text-accent hidden sm:block">Flamecoders</h1>
                     </a>
                 </div>
                 <div className="flex-none">

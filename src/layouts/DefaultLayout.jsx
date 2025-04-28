@@ -18,8 +18,9 @@ export default function DefaultLayout() {
                         <SidebarMenuItem onClick={() => navigate("/settings")}>Settings</SidebarMenuItem>
                         <CollapsibleSidebarSubMenu items={
                             <>
-                                <CollapsibleSidebarSubMenuItem>Posts</CollapsibleSidebarSubMenuItem>
-                                <CollapsibleSidebarSubMenuItem>Drafts</CollapsibleSidebarSubMenuItem>
+                                <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard")}>Overview</CollapsibleSidebarSubMenuItem>
+                                <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard?tab=posts")}>Posts</CollapsibleSidebarSubMenuItem>
+                                <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard?tab=drafts")}>Drafts</CollapsibleSidebarSubMenuItem>
                             </>
                         }>
                             Dashboard

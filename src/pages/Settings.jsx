@@ -63,7 +63,7 @@ export default function Settings() {
 
     return (
         <div className="max-w-3xl m-auto">
-            <h1 className="text-3xl font-bold mb-12">Settings</h1>
+            <h1 className="text-2xl font-bold mb-12">Settings</h1>
             <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex flex-col gap-2">
                     <label className="text-lg font-medium">Display Name</label>
