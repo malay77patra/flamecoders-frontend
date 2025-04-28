@@ -89,7 +89,7 @@ export default function Post() {
                 toast.error(error.message)
             } else {
                 toast.success("Post deleted.")
-                navigate("/")
+                navigate(-1)
             }
         } catch (err) {
             toast.error("Something went wrong!")
