@@ -13,20 +13,19 @@ import AuthorizedLayout from '@/layouts/AuthorizedLayout'
 export default function App() {
   return (
     <Routes>
-      {/* Public routes  */}
       <Route element={<BackLayout />}>
+        {/* Public routes  */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
 
       <Route element={<DefaultLayout />}>
+        {/* Public routes  */}
         <Route path="/" element={<Home />} />
         <Route path="/post/:id" element={<Post />} />
-      </Route>
 
-      {/* Protected routes  */}
-      <Route element={<AuthorizedLayout />}>
-        <Route element={<DefaultLayout />}>
+        {/* Protected routes  */}
+        <Route element={<AuthorizedLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
         </Route>
