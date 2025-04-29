@@ -34,53 +34,6 @@ function AllPosts({ posts }) {
     )
 }
 
-function DraftPosts({ posts }) {
-    return (
-        <ul className="py-4 flex flex-col gap-2">
-            {posts.map((post) => {
-                if (!post.published) {
-                    return (
-                        <li key={post.id} className="w-full flex items-center justify-center gap-2">
-                            <a href={`/post/${post.id}`} className="flex-1">
-                                {post.title ? (
-                                    <h1 className="text-lg font-bold break-all">{post.title}</h1>
-                                ) : (
-                                    <h1 className="text-lg font-bold break-all text-base-content/50">Untitled</h1>
-                                )}
-                            </a>
-                            {!post.published && (
-                                <div className="bg-warning px-2 py-1 text-sm rounded-full">Draft</div>
-                            )}
-                        </li>
-                    )
-                }
-            })}
-        </ul>
-    )
-}
-
-function PublishedPosts({ posts }) {
-    return (
-        <ul className="py-4 flex flex-col gap-2">
-            {posts.map((post) => {
-                if (post.published) {
-                    return (
-                        <li key={post.id} className="w-full flex items-center justify-center gap-2">
-                            <a href={`/post/${post.id}`} className="flex-1">
-                                {post.title ? (
-                                    <h1 className="text-lg font-bold break-all">{post.title}</h1>
-                                ) : (
-                                    <h1 className="text-lg font-bold break-all text-base-content/50">Untitled</h1>
-                                )}
-                            </a>
-                        </li>
-                    )
-                }
-            })}
-        </ul>
-    )
-}
-
 export default function Posts() {
     const { authToken } = useAuth()
     const api = useApi()
@@ -88,6 +41,24 @@ export default function Posts() {
     const [posts, setPosts] = useState([])
     const navigate = useNavigate()
     const location = useLocation()
+
+    const filteredPosts = [];
+
+    if (filter === "posts") {
+        posts.forEach((post) => {
+            if (post.published) {
+                filteredPosts.push(post)
+            }
+        })
+    } else if (filter == "drafts") {
+        posts.forEach((post) => {
+            if (!post.published) {
+                filteredPosts.push(post)
+            }
+        })
+    } else {
+        filteredPosts.push(...posts)
+    }
 
     const fetchMyPosts = async () => {
         const { error, data } = await api.get(`/api/post/posts/my`, {
@@ -119,6 +90,7 @@ export default function Posts() {
 
     useEffect(() => {
         fetchMyPosts()
+        console.log("re fetching...")
     }, [location])
 
     return (
@@ -131,15 +103,7 @@ export default function Posts() {
                 <button className="btn btn-accent" onClick={createNewPost}><FaPlus /> New</button>
             </div>
             <div className="max-w-3xl m-auto">
-                {(filter === "all") && (
-                    <AllPosts posts={posts} />
-                )}
-                {(filter === "posts") && (
-                    <PublishedPosts posts={posts} />
-                )}
-                {(filter === "drafts") && (
-                    <DraftPosts posts={posts} />
-                )}
+                <AllPosts posts={filteredPosts} />
             </div>
         </>
     )
