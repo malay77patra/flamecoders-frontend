@@ -76,7 +76,7 @@ export function Confirmer() {
 
     return (
         <div
-            className="fixed inset-0 flex items-center justify-center z-50"
+            className="fixed inset-0 flex items-center justify-center z-50 p-4"
             onClick={handleDismiss}
         >
             <div

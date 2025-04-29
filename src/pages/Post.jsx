@@ -117,7 +117,7 @@ export default function Post() {
         try {
             const { error, data } = await api.post("/api/post/update", {
                 id: id,
-                title: title,
+                title: title.trim(),
                 metadata: metadata
             }, {
                 headers: {
