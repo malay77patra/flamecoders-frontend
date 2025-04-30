@@ -9,6 +9,7 @@ import RadialLoader from "@/components/ui/RadialLoader"
 import toast from "react-hot-toast"
 import { useAuth } from "@/hooks/useAuth"
 import confirmation from "@/lib/react-hot-confirmation"
+import { FaFire } from "react-icons/fa6"
 
 export default function Post() {
     const { id } = useParams()
@@ -24,9 +25,27 @@ export default function Post() {
     const [published, setPublished] = useState(true)
     const [publishing, setPublishing] = useState(false)
     const [deleting, setDeleting] = useState(false)
+    const [liked, setLiked] = useState(false)
+    const [likeCount, setLikeCount] = useState(0)
     const navigate = useNavigate()
 
     const api = useApi()
+
+    const toggleLike = async () => {
+        const { error, data } = await api.post("/api/post/like", {
+            id: id
+        }, {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        })
+        if (error) {
+            toast.error(error.message)
+        } else {
+            setLiked(data.liked)
+            setLikeCount(data.likeCount)
+        }
+    }
 
     const togglePublished = async () => {
         setPublishing(true)
@@ -68,6 +87,8 @@ export default function Post() {
                 setMetadata(data.metadata)
                 setIsAuthor(data.me)
                 setPublished(data.published)
+                setLiked(data.liked)
+                setLikeCount(data.likeCount)
             }
         } catch (err) {
             setLoadingError("Something went wrong!")
@@ -195,6 +216,9 @@ export default function Post() {
                                 readOnly={!(isEditing && isAuthor)}
                                 placeholder="Start writing your post..."
                             />
+                            <button className={`fixed bottom-4 right-4 btn btn-outline shadow-lg ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
+                                <FaFire size="1rem" /> {likeCount}
+                            </button>
                         </div>
                     )}
                 </>
