@@ -162,7 +162,7 @@ export default function Post() {
                     {loadingError ? <PageError message={loadingError} /> : (
                         <div className="flex flex-col gap-2">
                             {isAuthor && (
-                                <div className="flex justify-end gap-2">
+                                <div className="flex justify-end gap-2 mb-4">
                                     <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>
                                         {isEditing ? "Preview" : "Edit"}
                                     </button>

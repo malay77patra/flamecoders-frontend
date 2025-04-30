@@ -54,7 +54,7 @@ export default function Home() {
     }, [])
 
     return (
-        <>
+        <div className="p-1 sm:p-2">
             {fetching ? (
                 <div className="flex items-center justify-center p-2">
                     <span className="loading loading-spinner"></span>
@@ -90,6 +90,6 @@ export default function Home() {
                     })}
                 </ul>
             )}
-        </>
+        </div>
     )
 }
