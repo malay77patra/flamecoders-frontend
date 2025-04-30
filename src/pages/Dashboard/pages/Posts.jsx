@@ -41,8 +41,9 @@ export default function Posts() {
     const [posts, setPosts] = useState([])
     const navigate = useNavigate()
     const location = useLocation()
+    const [fetching, setFetching] = useState(false)
 
-    const filteredPosts = [];
+    const filteredPosts = []
 
     if (filter === "posts") {
         posts.forEach((post) => {
@@ -61,16 +62,23 @@ export default function Posts() {
     }
 
     const fetchMyPosts = async () => {
-        const { error, data } = await api.get(`/api/post/posts/my`, {
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
-        })
+        setFetching(true)
+        try {
+            const { error, data } = await api.get(`/api/post/posts/my`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            })
 
-        if (error) {
-            toast.error(error.message)
-        } else {
-            setPosts(data)
+            if (error) {
+                toast.error(error.message)
+            } else {
+                setPosts(data)
+            }
+        } catch (err) {
+            toast.error("Somethimg went wrong!")
+        } finally {
+            setFetching(false)
         }
     }
 
@@ -103,7 +111,13 @@ export default function Posts() {
                 <button className="btn btn-accent" onClick={createNewPost}><FaPlus /> New</button>
             </div>
             <div className="max-w-3xl m-auto">
-                <AllPosts posts={filteredPosts} />
+                {fetching ? (
+                    <div className="flex items-center justify-center p-2">
+                        <span className="loading loading-spinner"></span>
+                    </div>
+                ) : (
+                    <AllPosts posts={filteredPosts} />
+                )}
             </div>
         </>
     )
