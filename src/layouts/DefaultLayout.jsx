@@ -1,9 +1,11 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from '@/components/ui/Navbar'
 import { Sidebar, SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function DefaultLayout() {
     const navigate = useNavigate()
+    const { isAuthenticated } = useAuth()
 
     return (
         <SidebarProvider>
@@ -14,15 +16,24 @@ export default function DefaultLayout() {
                 <SidebarContent>
                     <SidebarMenu>
                         <SidebarMenuItem onClick={() => navigate("/")}>Home</SidebarMenuItem>
-                        <SidebarMenuItem onClick={() => navigate("/settings")}>Settings</SidebarMenuItem>
-                        <CollapsibleSidebarSubMenu items={
+                        {isAuthenticated ? (
                             <>
-                                <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard")}>Overview</CollapsibleSidebarSubMenuItem>
-                                <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard?tab=posts")}>Posts</CollapsibleSidebarSubMenuItem>
+                                <SidebarMenuItem onClick={() => navigate("/settings")}>Settings</SidebarMenuItem>
+                                <CollapsibleSidebarSubMenu items={
+                                    <>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard")}>Overview</CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard?tab=posts")}>Posts</CollapsibleSidebarSubMenuItem>
+                                    </>
+                                }>
+                                    Dashboard
+                                </CollapsibleSidebarSubMenu>
                             </>
-                        }>
-                            Dashboard
-                        </CollapsibleSidebarSubMenu>
+                        ) : (
+                            <>
+                                <SidebarMenuItem onClick={() => navigate("/login")}>Login</SidebarMenuItem>
+                                <SidebarMenuItem onClick={() => navigate("/register")}>Register</SidebarMenuItem>
+                            </>
+                        )}
                     </SidebarMenu>
                 </SidebarContent>
             </Sidebar>
