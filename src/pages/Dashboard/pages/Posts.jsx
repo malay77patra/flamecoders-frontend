@@ -110,7 +110,7 @@ export default function Posts() {
                 <div className="flex-1"></div>
                 <button className="btn btn-accent" onClick={createNewPost}><FaPlus /> New</button>
             </div>
-            <div className="max-w-3xl m-auto">
+            <div className="max-w-3xl m-auto mt-4">
                 {fetching ? (
                     <div className="flex items-center justify-center p-2">
                         <span className="loading loading-spinner"></span>
