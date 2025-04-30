@@ -64,7 +64,7 @@ export default function Posts() {
     const fetchMyPosts = async () => {
         setFetching(true)
         try {
-            const { error, data } = await api.get(`/api/post/posts/my`, {
+            const { error, data } = await api.get(`/api/post/my`, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
                 }

@@ -37,6 +37,7 @@
     "axios-auth-refresh": "^3.3.6",
     "boring-avatars": "^1.11.2",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "install": "^0.13.0",
     "lucide-react": "^0.503.0",
     "npm": "^11.3.0",
