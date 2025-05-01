@@ -180,51 +180,65 @@ export default function Post() {
     return (
         <>
             {loading ? <PageLoading /> : (
-                <>
+                <div className="container mx-auto px-4">
                     {loadingError ? <PageError message={loadingError} /> : (
-                        <div className="flex gap-2">
-                            <div className="p-2 w-24 items-center hidden md:flex flex-col gap-2">
+                        <div className="flex flex-col md:flex-row gap-2 relative">
+                            <div className="hidden md:flex w-16 lg:w-24 flex-shrink-0 flex-col items-center gap-4 sticky top-20 self-start">
                                 {!isEditing && (
                                     <>
-                                        <div>
-                                            <span className="flex items-center justify-center w-10 text-sm text-accent">{likeCount}</span>
-                                            <button className={`btn btn-square ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
+                                        <div className="flex flex-col items-center">
+                                            <button
+                                                className={`btn btn-square ${liked ? 'text-accent' : ''}`}
+                                                onClick={toggleLike}
+                                                aria-label="Like post"
+                                            >
                                                 <FaFire size="1rem" />
                                             </button>
+                                            <span className="text-sm text-accent mt-1">{likeCount}</span>
                                         </div>
-                                        <CopyLinkButton link="hi" />
+                                        <CopyLinkButton link={window.location.href} />
                                     </>
                                 )}
                             </div>
-                            <div className="flex-1">
-                                <div className="flex flex-col gap-2 max-w-3xl m-auto py-2">
-                                    {isAuthor && (
-                                        <div className="flex justify-end gap-2 mb-4">
-                                            <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>
-                                                {isEditing ? "Preview" : "Edit"}
-                                            </button>
-                                            <button disabled={!chnaged} className="btn btn-accent btn-sm" onClick={savePost}>
-                                                {saving ? <RadialLoader /> : "Save"}
-                                            </button>
-                                            <button className={`btn btn-sm ${published ? 'btn-error' : 'btn-success'}`} onClick={togglePublished} >
-                                                {publishing ? <RadialLoader /> : (published ? "Unpublish" : "Publish")}
-                                            </button>
-                                            <button className="btn btn-sm btn-error" onClick={confirmDelete} >
-                                                {deleting ? <RadialLoader /> : "Delete"}
-                                            </button>
-                                        </div>
-                                    )}
-                                    {/* <TextareaAutosize
-                                        className="outline-none text-3xl md:text-4xl font-bold resize-none"
-                                        placeholder="Untitled"
-                                        maxLength={75}
-                                        value={title}
-                                        readOnly={!(isEditing && isAuthor)}
-                                        onChange={(event) => {
-                                            setTitle(event.target.value)
-                                            setChanged(true)
-                                        }}
-                                    /> */}
+
+                            <div className="flex-1 max-w-3xl mx-auto w-full">
+                                {isAuthor && (
+                                    <div className="flex flex-wrap justify-end gap-2 mb-4 mt-2">
+                                        <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>
+                                            {isEditing ? "Preview" : "Edit"}
+                                        </button>
+                                        <button
+                                            disabled={!chnaged}
+                                            className="btn btn-accent btn-sm"
+                                            onClick={savePost}
+                                        >
+                                            {saving ? <RadialLoader /> : "Save"}
+                                        </button>
+                                        <button
+                                            className={`btn btn-sm ${published ? 'btn-error' : 'btn-success'}`}
+                                            onClick={togglePublished}
+                                        >
+                                            {publishing ? <RadialLoader /> : (published ? "Unpublish" : "Publish")}
+                                        </button>
+                                        <button className="btn btn-sm btn-error" onClick={confirmDelete}>
+                                            {deleting ? <RadialLoader /> : "Delete"}
+                                        </button>
+                                    </div>
+                                )}
+
+                                <TextareaAutosize
+                                    className="outline-none text-2xl md:text-3xl lg:text-4xl font-bold resize-none w-full"
+                                    placeholder="Untitled"
+                                    maxLength={75}
+                                    value={title}
+                                    readOnly={!(isEditing && isAuthor)}
+                                    onChange={(event) => {
+                                        setTitle(event.target.value)
+                                        setChanged(true)
+                                    }}
+                                />
+
+                                <div className="mt-4 pb-16">
                                     <TTEditor
                                         metadata={metadata}
                                         setMetadata={setMetadata}
@@ -232,18 +246,23 @@ export default function Post() {
                                         readOnly={!(isEditing && isAuthor)}
                                         placeholder="Start writing your post..."
                                     />
-                                    {!isEditing && (
-                                        <div className="fixed bottom-0 left-0 w-full z-10 bg-base-100 shadow-up-md p-2 flex md:hidden items-center justify-end">
-                                            <button className={`btn btn-ghost ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
-                                                <FaFire size="1rem" /> {likeCount}
-                                            </button>
-                                        </div>
-                                    )}
                                 </div>
+
+                                {!isEditing && (
+                                    <div className="md:hidden fixed bottom-0 left-0 right-0 bg-base-100 shadow-up-md px-4 py-2 flex items-center justify-between z-10">
+                                        <button
+                                            className={`btn ${liked ? 'text-accent' : ''}`}
+                                            onClick={toggleLike}
+                                        >
+                                            <FaFire size="1rem" /> <span className="ml-1">{likeCount}</span>
+                                        </button>
+                                        <CopyLinkButton link={window.location.href} />
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
-                </>
+                </div>
             )}
         </>
     )
