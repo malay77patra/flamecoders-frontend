@@ -214,7 +214,7 @@ export default function Post() {
                                             </button>
                                         </div>
                                     )}
-                                    <TextareaAutosize
+                                    {/* <TextareaAutosize
                                         className="outline-none text-3xl md:text-4xl font-bold resize-none"
                                         placeholder="Untitled"
                                         maxLength={75}
@@ -224,7 +224,7 @@ export default function Post() {
                                             setTitle(event.target.value)
                                             setChanged(true)
                                         }}
-                                    />
+                                    /> */}
                                     <TTEditor
                                         metadata={metadata}
                                         setMetadata={setMetadata}
@@ -232,11 +232,13 @@ export default function Post() {
                                         readOnly={!(isEditing && isAuthor)}
                                         placeholder="Start writing your post..."
                                     />
-                                    <div className="fixed bottom-0 left-0 w-full z-10 bg-base-100 shadow-up-md p-2 flex md:hidden items-center">
-                                        <button className={`btn btn-ghost ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
-                                            <FaFire size="1rem" /> {likeCount}
-                                        </button>
-                                    </div>
+                                    {!isEditing && (
+                                        <div className="fixed bottom-0 left-0 w-full z-10 bg-base-100 shadow-up-md p-2 flex md:hidden items-center justify-end">
+                                            <button className={`btn btn-ghost ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
+                                                <FaFire size="1rem" /> {likeCount}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
