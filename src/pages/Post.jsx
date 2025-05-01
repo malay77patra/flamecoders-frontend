@@ -197,7 +197,7 @@ export default function Post() {
                                 )}
                             </div>
                             <div className="flex-1">
-                                <div className="flex flex-col gap-2 max-w-3xl m-auto p-2">
+                                <div className="flex flex-col gap-2 max-w-3xl m-auto py-2">
                                     {isAuthor && (
                                         <div className="flex justify-end gap-2 mb-4">
                                             <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>

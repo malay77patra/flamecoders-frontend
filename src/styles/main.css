@@ -53,7 +53,7 @@ body {
 
 /* Tiptap customizations  */
 .tiptap {
-    @apply border-0 outline-0 min-h-[50vh];
+    @apply border-0 outline-0;
 }
 
 .tiptap {
