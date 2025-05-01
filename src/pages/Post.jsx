@@ -216,9 +216,11 @@ export default function Post() {
                                 readOnly={!(isEditing && isAuthor)}
                                 placeholder="Start writing your post..."
                             />
-                            <button className={`fixed bottom-4 right-4 btn btn-outline shadow-lg ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
-                                <FaFire size="1rem" /> {likeCount}
-                            </button>
+                            <div className="fixed bottom-0 left-0 w-full z-10 bg-base-100 shadow-[-4px_-4px_10px_rgba(0,0,0,0.1)] p-2 flex items-center">
+                                <button className={`btn btn-ghost ${liked ? 'text-accent' : ''}`} onClick={toggleLike}>
+                                    <FaFire size="1rem" /> {likeCount}
+                                </button>
+                            </div>
                         </div>
                     )}
                 </>
