@@ -187,6 +187,7 @@ export default function Post() {
                                 {!isEditing && (
                                     <>
                                         <div className="flex flex-col items-center">
+                                            <span className="text-sm text-accent mt-1">{likeCount}</span>
                                             <button
                                                 className={`btn btn-square ${liked ? 'text-accent' : ''}`}
                                                 onClick={toggleLike}
@@ -194,7 +195,6 @@ export default function Post() {
                                             >
                                                 <FaFire size="1rem" />
                                             </button>
-                                            <span className="text-sm text-accent mt-1">{likeCount}</span>
                                         </div>
                                         <CopyLinkButton link={window.location.href} />
                                     </>
