@@ -43,6 +43,8 @@
 
 @theme {
     --font-poppins: "Poppins", "sans-serif";
+    
+    --shadow-up-md: 0 -1px 5px rgba(0,0,0,0.2);
 }
 
 body {
@@ -51,7 +53,7 @@ body {
 
 /* Tiptap customizations  */
 .tiptap {
-    @apply border-0 outline-0 min-h-[70vh];
+    @apply border-0 outline-0 min-h-[50vh];
 }
 
 .tiptap {
