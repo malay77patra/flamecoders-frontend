@@ -180,7 +180,7 @@ export default function Post() {
     return (
         <>
             {loading ? <PageLoading /> : (
-                <div className="container mx-auto px-4">
+                <div className="container mx-auto">
                     {loadingError ? <PageError message={loadingError} /> : (
                         <div className="flex flex-col md:flex-row gap-2 relative">
                             <div className="hidden md:flex w-16 lg:w-24 flex-shrink-0 flex-col items-center gap-4 sticky top-20 self-start">

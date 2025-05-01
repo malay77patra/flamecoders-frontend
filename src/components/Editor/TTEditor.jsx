@@ -10,6 +10,8 @@ import Heading from '@tiptap/extension-heading'
 import { EditorContent, useEditor } from '@tiptap/react'
 import React, { useEffect } from 'react'
 import ToolBar from './components/ToolBar'
+import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight'
+import { all, createLowlight } from 'lowlight'
 
 export default function TTEditor({
   metadata = {
@@ -27,6 +29,7 @@ export default function TTEditor({
   placeholder = "Start writing..."
 }) {
 
+  const lowlight = createLowlight(all)
   const editor = useEditor({
     autofocus: autoFocus,
     content: metadata,
@@ -35,9 +38,16 @@ export default function TTEditor({
       Document,
       Paragraph,
       Text,
+      CodeBlockLowlight.configure({
+        lowlight,
+      }),
       Bold,
       Italic,
-      Code,
+      Code.configure({
+        HTMLAttributes: {
+          class: 'inline-code',
+        },
+      }),
       Heading.configure({
         levels: [1, 2, 3],
       }),
