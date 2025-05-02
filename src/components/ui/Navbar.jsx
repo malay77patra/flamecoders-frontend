@@ -5,11 +5,9 @@ import toast from "react-hot-toast"
 import { useState } from "react"
 import RadialLoader from "@/components/ui/RadialLoader"
 import { MdLogout } from "react-icons/md"
-import Avatar from "boring-avatars"
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
@@ -60,7 +58,11 @@ export default function Navbar() {
                     {isAuthenticated ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger className="outline-none">
-                                <Avatar name={user.email} className="h-10 w-10 border rounded-full cursor-pointer" tabIndex={0} colors={["#000000", "#9500ff", "#ff005b", "#7e36ba", "#00b5c2"]} />
+                                <div className="avatar border rounded-full cursor-pointer">
+                                    <div className="size-10 rounded-full">
+                                        <img src={user.avatar} />
+                                    </div>
+                                </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuLabel>

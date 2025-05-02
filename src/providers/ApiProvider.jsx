@@ -8,7 +8,7 @@ const ApiProvider = ({ children }) => {
     const navigate = useNavigate();
     const serverURL = import.meta.env.VITE_SERVER_URL;
     const refreshEndPoint = `${serverURL}/api/user/refresh`;
-    const { setAuthToken } = useAuth();
+    const { setAuthToken, setUser } = useAuth();
 
     const api = axios.create({
         baseURL: serverURL,
@@ -25,6 +25,8 @@ const ApiProvider = ({ children }) => {
 
         } catch (err) {
             if (err?.response?.data?.redirect) {
+                setUser({});
+                setAuthToken("");
                 navigate("/login");
                 throw { response: { data: { message: "Please login" } } };
             }
