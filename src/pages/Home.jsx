@@ -38,7 +38,7 @@ export default function Home() {
                     <span className="loading loading-spinner"></span>
                 </div>
             ) : (
-                <div className="max-w-3xl m-auto mt-4 flex flex-col gap-2">
+                <div className="max-w-3xl m-auto flex flex-col gap-2">
                     {posts.map((post) => {
                         const date = new Date(post.timestamp);
                         let displayDate;
