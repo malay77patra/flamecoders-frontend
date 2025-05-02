@@ -38,7 +38,7 @@ export default function Home() {
                     <span className="loading loading-spinner"></span>
                 </div>
             ) : (
-                <ul className="max-w-3xl m-auto mt-4 flex flex-col gap-2">
+                <div className="max-w-3xl m-auto mt-4 flex flex-col gap-2">
                     {posts.map((post) => {
                         const date = new Date(post.timestamp);
                         let displayDate;
@@ -54,9 +54,9 @@ export default function Home() {
                         }
 
                         return (
-                            <li key={post.id} className="bg-base-200 p-4 rounded-box">
+                            <Link to={`/post/${post.id}`} key={post.id} className="bg-base-200 p-4 rounded-box">
                                 <div className="mb-4 flex items-center gap-2">
-                                    <div className="avatar border rounded-full cursor-pointer">
+                                    <div className="avatar border rounded-full">
                                         <div className="size-8 rounded-full">
                                             <img src={post.author.avatar} />
                                         </div>
@@ -66,21 +66,24 @@ export default function Home() {
                                         <p className="text-xs text-base-content/60">{displayDate}</p>
                                     </div>
                                 </div>
-                                <Link to={`/post/${post.id}`}>
-                                    <h1 className="text-xl md:text-2xl font-bold break-all">{post.title}</h1>
-                                </Link>
+                                <h1 className="text-xl md:text-2xl font-bold break-all">{post.title}</h1>
                                 <div className="mt-2 flex items-center justify-center">
                                     <span className="text-xs text-base-content/60 flex items-center justify-center gap-1">
                                         <FaFire />
                                         {post.likeCount}
                                     </span>
                                     <div className="flex-1"></div>
-                                    <CopyLinkButton link={window.location.origin + `/post/${post.id}`} />
+                                    <div onClick={(e) => {
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                    }}>
+                                        <CopyLinkButton link={window.location.origin + `/post/${post.id}`} />
+                                    </div>
                                 </div>
-                            </li>
+                            </Link>
                         )
                     })}
-                </ul>
+                </div>
             )}
         </div>
     )

@@ -51,7 +51,6 @@ export default function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
     const api = useApi();
-    const { setUser, setAuthToken } = useAuth();
 
     const {
         register,
@@ -69,9 +68,8 @@ export default function Register() {
             if (error) {
                 toast.error(error.message);
             } else {
-                toast.success(
-                    "A verification link has been sent to your email, please check your inbox."
-                );
+                toast.success("A verification link has been sent to your email, please check your inbox.")
+                navigate("/login")
             }
         } catch (err) {
             console.log("Unexpected error:", err);
