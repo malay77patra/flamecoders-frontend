@@ -68,7 +68,7 @@ export default function Home() {
                                 </div>
                                 <h1 className="text-xl md:text-2xl font-bold break-all">{post.title}</h1>
                                 <div className="mt-2 flex items-center justify-center">
-                                    <span className="text-xs text-base-content/60 flex items-center justify-center gap-1">
+                                    <span className="text-sm text-base-content/60 flex items-center justify-center gap-1">
                                         <FaFire />
                                         {post.likeCount}
                                     </span>
