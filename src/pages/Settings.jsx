@@ -4,7 +4,7 @@ import { useApi } from "@/hooks/useApi"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import {  useState } from "react"
+import { useRef, useState } from "react"
 import toast from "react-hot-toast";
 
 const updateSchema = yup
@@ -26,6 +26,8 @@ export default function Settings() {
     const { user, setUser, authToken } = useAuth()
     const api = useApi()
     const [saving, setSaving] = useState(false)
+    const [uploadingAvatar, setUploadingAvatar] = useState(false)
+    const avatarRef = useRef(null)
 
     const {
         register,
@@ -61,16 +63,60 @@ export default function Settings() {
         }
     }
 
+    const handleAvatarChange = async (event) => {
+        setUploadingAvatar(true)
+        try {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const { error, data } = await api.patch("/api/user/update", formData, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                    // Fix for overwriting predefined Content-Type in axios instance
+                    // reference: https://github.com/axios/axios/issues/5556#issuecomment-1434668134
+                    "Content-Type": undefined
+                }
+            })
+            if (error) {
+                toast.error(error.message)
+            } else {
+                setUser(prev => ({
+                    ...prev,
+                    ...data
+                }))
+            }
+        } catch (err) {
+            toast.error("Something went wrong")
+        } finally {
+            setUploadingAvatar(false)
+        }
+    }
+
     return (
         <div className="max-w-3xl m-auto">
-            <h1 className="text-2xl font-bold mb-12">Settings</h1>
+            <h1 className="text-2xl font-bold mb-4">Settings</h1>
             <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex flex-col gap-2">
-                    <label className="text-lg font-medium">Display Name</label>
-                    <input className="input" defaultValue={user.name} {...register("name")} />
-                    {errors.name && <p className="text-error text-sm">{errors.name.message}</p>}
+                <div className="flex flex-col gap-4 items-start">
+                    <div className="flex flex-col gap-2">
+                        <label className="text-lg font-medium">Avatar</label>
+                        <div className="avatar rounded-full cursor-pointer">
+                            <div className="size-16 rounded-full border">
+                                <img src={user.avatar} />
+                            </div>
+                        </div>
+                        <button type="button" className="btn" onClick={() => avatarRef.current.click()} disabled={uploadingAvatar}>{uploadingAvatar ? <span className="loading loading-spinner"></span> : "Uplaod"}</button>
+                        <input type="file" className="hidden" accept="image/jpeg, image/png, image/webp" ref={avatarRef} onChange={handleAvatarChange} />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                        <label className="text-lg font-medium">Name</label>
+                        <input className="input" defaultValue={user.name} {...register("name")} />
+                        {errors.name && <p className="text-error text-sm">{errors.name.message}</p>}
+                    </div>
                 </div>
-                <div className="mt-12 flex">
+                <div className="mt-12 flex justify-end fixed bottom-0 left-0 p-2 shadow-up-md w-full sm:static sm:shadow-none">
                     <button className="btn btn-accent" type="submit" disabled={saving}>
                         {saving ? <RadialLoader /> : "Save"}
                     </button>
