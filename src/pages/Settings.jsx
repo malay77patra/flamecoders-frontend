@@ -110,7 +110,7 @@ export default function Settings() {
                             </div>
                         </div>
                         <button type="button" className="btn" onClick={() => avatarRef.current.click()} disabled={uploadingAvatar}>{uploadingAvatar ? <span className="loading loading-spinner"></span> : "Uplaod"}</button>
-                        <input type="file" className="hidden" accept="image/jpeg, image/png, image/webp" ref={avatarRef} onChange={handleAvatarChange} />
+                        <input type="file" className="hidden" accept="image/jpeg, image/png, image/webp" ref={avatarRef} onInput={handleAvatarChange} />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="text-lg font-medium">Name</label>
