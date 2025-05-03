@@ -24,8 +24,8 @@ createRoot(document.getElementById('root')).render(
           <Confirmer />
         </ApiProvider>
       </AuthProvider>
-    </BrowserRouter>,
-  </ThemeProvider>
+    </BrowserRouter>
+  </ThemeProvider>,
 )
 
 // createRoot(document.getElementById('root')).render(
