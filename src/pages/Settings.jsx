@@ -64,14 +64,17 @@ export default function Settings() {
     }
 
     const handleAvatarChange = async (event) => {
-        // only allow "image/jpeg, image/png, image/webp"
-        alert(event.target.files[0]?.type)
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const allowedTypes = ["image/jpeg", "image/png", "image/webp"];
+        if (!allowedTypes.includes(file.type)) {
+            toast.error("Only JPEG, PNG, or WEBP images are allowed");
+            return;
+        }
 
         setUploadingAvatar(true)
         try {
-            const file = event.target.files[0];
-            if (!file) return;
-
             const formData = new FormData();
             formData.append('image', file);
 
