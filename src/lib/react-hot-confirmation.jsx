@@ -1,6 +1,4 @@
-import React, { useState, useEffect, createContext, useContext, useCallback } from 'react';
-
-const ConfirmationContext = createContext(null);
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 const VARIANTS = {
     base: 'btn',
@@ -11,6 +9,7 @@ const VARIANTS = {
 };
 
 export function Confirmer() {
+    const dialogRef = useRef(null);
     const [confirmState, setConfirmState] = useState({
         isOpen: false,
         title: '',
@@ -22,36 +21,17 @@ export function Confirmer() {
         onCancel: () => { },
     });
 
-    useEffect(() => {
-        const handleEsc = (event) => {
-            if (event.key === 'Escape' && confirmState.isOpen) {
-                handleDismiss();
-            }
-        };
-
-        window.addEventListener('keydown', handleEsc);
-        return () => {
-            window.removeEventListener('keydown', handleEsc);
-        };
-    }, [confirmState.isOpen]);
-
     const handleDismiss = useCallback(() => {
-        setConfirmState(prev => {
-            if (prev.isOpen) {
-                prev.onCancel();
-            }
-            return { ...prev, isOpen: false };
-        });
-    }, []);
+        dialogRef.current?.close();
+        confirmState.onCancel?.();
+        setConfirmState(prev => ({ ...prev, isOpen: false }));
+    }, [confirmState]);
 
     const handleConfirm = useCallback(() => {
-        setConfirmState(prev => {
-            if (prev.isOpen) {
-                setTimeout(() => prev.onConfirm(), 0);
-            }
-            return { ...prev, isOpen: false };
-        });
-    }, []);
+        dialogRef.current?.close();
+        setTimeout(() => confirmState.onConfirm?.(), 0);
+        setConfirmState(prev => ({ ...prev, isOpen: false }));
+    }, [confirmState]);
 
     const showConfirmation = useCallback((options) => {
         setConfirmState({
@@ -70,59 +50,48 @@ export function Confirmer() {
         window.showHotConfirmation = showConfirmation;
     }, [showConfirmation]);
 
-    if (!confirmState.isOpen) return null;
+    useEffect(() => {
+        if (confirmState.isOpen && dialogRef.current) {
+            dialogRef.current.showModal();
+        }
+    }, [confirmState.isOpen]);
+
+    useEffect(() => {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+
+        const handleNativeClose = () => {
+            setConfirmState(prev => ({ ...prev, isOpen: false }));
+        };
+
+        dialog.addEventListener('close', handleNativeClose);
+        return () => {
+            dialog.removeEventListener('close', handleNativeClose);
+        };
+    }, []);
 
     const confirmButtonClass = VARIANTS[confirmState.variant] || VARIANTS.base;
 
     return (
-        <div
-            className="fixed inset-0 flex items-center justify-center z-50 p-4"
-            onClick={handleDismiss}
-        >
-            <div
-                className="bg-base-100 max-w-md w-full rounded-lg shadow-lg pointer-events-auto flex flex-col border p-2"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <div className="flex-1 p-2">
-                    <div className="flex flex-col">
-                        <h4 className="text-lg font-medium">
-                            {confirmState.title}
-                        </h4>
-                        <p className="mt-2 text-sm text-base-content/60">
-                            {confirmState.message}
-                        </p>
-                    </div>
-                </div>
-
-                <div className="flex gap-2 justify-end mt-4">
-                    <button
-                        onClick={handleDismiss}
-                        className='btn'
-                    >
-                        {confirmState.cancelText}
-                    </button>
-                    <button
-                        onClick={handleConfirm}
-                        className={`btn ${confirmButtonClass}`}
-                    >
-                        {confirmState.confirmText}
-                    </button>
+        <dialog id="confirmation_modal" className="modal" ref={dialogRef}>
+            <div className="modal-box">
+                <h3 className="font-bold text-lg">{confirmState.title}</h3>
+                <p className="py-4">{confirmState.message}</p>
+                <div className="modal-action">
+                    <form method="dialog" className="flex gap-2">
+                        <button type="button" onClick={handleDismiss} className="btn">
+                            {confirmState.cancelText}
+                        </button>
+                        <button type="button" onClick={handleConfirm} className={confirmButtonClass}>
+                            {confirmState.confirmText}
+                        </button>
+                    </form>
                 </div>
             </div>
-        </div>
+        </dialog>
     );
 }
 
-/**
- * @param {Object} options - Configuration options
- * @param {string} options.title - The title of the confirmation
- * @param {string} options.message - The message to display
- * @param {string} options.confirmText - Text for the confirm button (default: "Confirm")
- * @param {string} options.cancelText - Text for the cancel button (default: "Cancel")
- * @param {Function} options.onConfirm - Function to call when confirmed
- * @param {Function} options.onCancel - Function to call when canceled (optional)
- * @param {'base'|'primary'|'error'|'success'|'info'} options.variant - Button variant (default: 'base')
- */
 export const confirmation = (options) => {
     if (typeof window !== 'undefined' && window.showHotConfirmation) {
         window.showHotConfirmation(options);

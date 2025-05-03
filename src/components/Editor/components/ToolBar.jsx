@@ -6,6 +6,7 @@ import { FaCode } from "react-icons/fa";
 import { BsTypeH1 } from "react-icons/bs";
 import { BsTypeH2 } from "react-icons/bs";
 import { BsTypeH3 } from "react-icons/bs";
+import ImageSelector from "./ImageSelector";
 
 export default function ToolBar({ editor }) {
 
@@ -55,6 +56,7 @@ export default function ToolBar({ editor }) {
                     <BsTypeH3 />
                 </button>
             </div>
+            <ImageSelector />
         </div>
     )
 }
