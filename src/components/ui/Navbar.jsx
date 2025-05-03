@@ -12,6 +12,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
     DropdownFooter,
+    DropdownMenuItem
 } from "@/components/ui/Dropdown"
 import { SidebarTrigger } from "@/components/ui/Sidebar"
 
@@ -63,12 +64,15 @@ export default function Navbar() {
                                     </div>
                                 </div>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
+                            <DropdownMenuContent align="end" className="w-52">
                                 <DropdownMenuLabel>
                                     <h2>{user.name}</h2>
                                     <p className="text-xs text-base-content/60">{user.email}</p>
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
+                                <DropdownMenuItem onClick={() => navigate("/settings")}>
+                                    Account Settings
+                                </DropdownMenuItem>
                                 <DropdownFooter>
                                     <button className="btn btn-error w-full" onClick={handleLogout}>
                                         {loggingOut ? <RadialLoader /> : (

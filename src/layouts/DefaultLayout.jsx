@@ -18,7 +18,7 @@ export default function DefaultLayout() {
                         <SidebarMenuItem onClick={() => navigate("/")}>Home</SidebarMenuItem>
                         {isAuthenticated ? (
                             <>
-                                <SidebarMenuItem onClick={() => navigate("/settings")}>Settings</SidebarMenuItem>
+                                <SidebarMenuItem onClick={() => navigate("/settings")}>Account Settings</SidebarMenuItem>
                                 <CollapsibleSidebarSubMenu items={
                                     <>
                                         <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard")}>Overview</CollapsibleSidebarSubMenuItem>
