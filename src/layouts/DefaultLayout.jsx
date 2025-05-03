@@ -11,7 +11,7 @@ export default function DefaultLayout() {
         <SidebarProvider>
             <Sidebar>
                 <SidebarHeader>
-                    <h2 className='font-semibold'>Flamecoders</h2>
+                    <h2 className='font-semibold text-accent'>Flamecoders</h2>
                 </SidebarHeader>
                 <SidebarContent>
                     <SidebarMenu>

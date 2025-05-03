@@ -25,7 +25,7 @@ function AllPosts({ posts }) {
                             )}
                         </Link>
                         {!post.published && (
-                            <div className="bg-warning px-2 py-1 text-sm rounded-full">Draft</div>
+                            <div className="bg-warning px-2 py-1 text-sm rounded-full text-base-100">Draft</div>
                         )}
                     </li>
                 )

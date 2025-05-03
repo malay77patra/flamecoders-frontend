@@ -9,20 +9,23 @@ import '@/styles/main.css'
 import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from '@/providers/AuthProvider'
 import { ApiProvider } from '@/providers/ApiProvider'
+import { ThemeProvider } from '@/providers/ThemeProvider'
 import App from '@/App.jsx'
 import { Toaster } from 'react-hot-toast';
 import { Confirmer } from '@/lib/react-hot-confirmation'
 
 createRoot(document.getElementById('root')).render(
-  <BrowserRouter>
-    <AuthProvider>
-      <ApiProvider>
-        <App />
-        <Toaster position="bottom-center" />
-        <Confirmer />
-      </ApiProvider>
-    </AuthProvider>
-  </BrowserRouter>,
+  <ThemeProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <ApiProvider>
+          <App />
+          <Toaster position="bottom-center" />
+          <Confirmer />
+        </ApiProvider>
+      </AuthProvider>
+    </BrowserRouter>,
+  </ThemeProvider>
 )
 
 // createRoot(document.getElementById('root')).render(
