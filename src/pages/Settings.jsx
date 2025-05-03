@@ -64,11 +64,12 @@ export default function Settings() {
     }
 
     const handleAvatarChange = async (event) => {
+        // only allow "image/jpeg, image/png, image/webp"
+        alert(event.target.files[0]?.type)
+
         setUploadingAvatar(true)
         try {
-            alert("file picked")
             const file = event.target.files[0];
-            alert("is file found:", !!file)
             if (!file) return;
 
             const formData = new FormData();
@@ -110,7 +111,7 @@ export default function Settings() {
                             </div>
                         </div>
                         <button type="button" className="btn" onClick={() => avatarRef.current.click()} disabled={uploadingAvatar}>{uploadingAvatar ? <span className="loading loading-spinner"></span> : "Uplaod"}</button>
-                        <input type="file" className="hidden" accept="image/jpeg, image/png, image/webp" ref={avatarRef} onInput={handleAvatarChange} />
+                        <input type="file" className="hidden" ref={avatarRef} onChange={handleAvatarChange} />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className="text-lg font-medium">Name</label>
