@@ -91,6 +91,9 @@ export default function Navbar() {
                                                 <DropdownMenuItem onClick={() => setTheme("dark")}>
                                                     <span>Dark</span>
                                                 </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setTheme("modern")}>
+                                                    <span>Modern</span>
+                                                </DropdownMenuItem>
                                                 <DropdownMenuItem onClick={() => setTheme("cupcake")}>
                                                     <span>Cupcake</span>
                                                 </DropdownMenuItem>
@@ -99,6 +102,9 @@ export default function Navbar() {
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem onClick={() => setTheme("night")}>
                                                     <span>Night</span>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setTheme("valentine")}>
+                                                    <span>Valentine</span>
                                                 </DropdownMenuItem>
                                             </DropdownMenuSubContent>
                                         </DropdownMenuPortal>

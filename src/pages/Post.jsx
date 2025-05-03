@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth"
 import confirmation from "@/lib/react-hot-confirmation"
 import { FaFire } from "react-icons/fa6"
 import CopyLinkButton from "@/components/ui/CopyLinkButton"
+import { formatDistanceToNow, isToday, isThisWeek } from "date-fns"
 
 export default function Post() {
     const location = useLocation()
@@ -17,23 +18,61 @@ export default function Post() {
     const isEditMode = queryParams.get('mode') === "edit"
 
     const { id } = useParams()
-    const [metadata, setMetadata] = useState(null)
-    const [title, setTitle] = useState("")
+    const { authToken, isAuthenticated, user } = useAuth()
+    const [post, setPost] = useState({
+        title: "",
+        metadata: {
+            "type": "doc",
+            "content": [
+                {
+                    "type": "paragraph"
+                }
+            ]
+        },
+        published: false,
+        liked: false,
+        likeCount: 0,
+        author: null,
+        publishedAt: null,
+
+    })
+
     const [chnaged, setChanged] = useState(false)
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
     const [loadingError, setLoadingError] = useState("")
-    const [isAuthor, setIsAuthor] = useState(false)
     const [isEditing, setIsEditing] = useState(isEditMode)
-    const { authToken, isAuthenticated } = useAuth()
-    const [published, setPublished] = useState(true)
     const [publishing, setPublishing] = useState(false)
     const [deleting, setDeleting] = useState(false)
-    const [liked, setLiked] = useState(false)
-    const [likeCount, setLikeCount] = useState(0)
     const navigate = useNavigate()
 
     const api = useApi()
+
+    const setMetadata = (v) => {
+        setPost(prev => ({
+            ...prev,
+            metadata: v
+        }))
+    }
+
+    const [displayDate, setDisplayDate] = useState(null)
+    useEffect(() => {
+        if (post.publishedAt) {
+            const date = new Date(post.publishedAt)
+
+            if (isToday(date) || isThisWeek(date)) {
+                setDisplayDate(formatDistanceToNow(date, { addSuffix: true }))
+            } else {
+                setDisplayDate(date.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                }))
+            }
+        } else {
+            setDisplayDate("")
+        }
+    }, [post.publishedAt])
 
     const toggleLike = async () => {
         const { error, data } = await api.post("/api/post/like", {
@@ -46,8 +85,10 @@ export default function Post() {
         if (error) {
             toast.error(error.message)
         } else {
-            setLiked(data.liked)
-            setLikeCount(data.likeCount)
+            setPost(prev => ({
+                ...prev,
+                ...data
+            }))
         }
     }
 
@@ -56,7 +97,7 @@ export default function Post() {
         try {
             const { error, data } = await api.post("/api/post/update", {
                 id: id,
-                published: !published
+                published: !post.published
             }, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -65,8 +106,11 @@ export default function Post() {
             if (error) {
                 toast.error(error.message)
             } else {
-                toast.success(published ? "Unpublished" : "Published")
-                setPublished(!published)
+                toast.success(post.published ? "Unpublished" : "Published")
+                setPost(prev => ({
+                    ...prev,
+                    ...data
+                }))
                 setPublishing(false)
             }
         } catch (err) {
@@ -87,12 +131,7 @@ export default function Post() {
             if (error) {
                 setLoadingError(error.message)
             } else {
-                setTitle(data.title)
-                setMetadata(data.metadata)
-                setIsAuthor(data.me)
-                setPublished(data.published)
-                setLiked(data.liked)
-                setLikeCount(data.likeCount)
+                setPost(data)
             }
         } catch (err) {
             setLoadingError("Something went wrong!")
@@ -142,8 +181,8 @@ export default function Post() {
         try {
             const { error, data } = await api.post("/api/post/update", {
                 id: id,
-                title: title.trim(),
-                metadata: metadata
+                title: post.title.trim(),
+                metadata: post.metadata
             }, {
                 headers: {
                     Authorization: `Bearer ${authToken}`
@@ -153,8 +192,10 @@ export default function Post() {
             if (error) {
                 toast.error(error.message)
             } else {
-                setTitle(data.title)
-                setMetadata(data.metadata)
+                setPost(prev => ({
+                    ...prev,
+                    ...data
+                }))
                 toast.success("Saved")
                 setChanged(false)
             }
@@ -190,9 +231,9 @@ export default function Post() {
                                 {!isEditing && (
                                     <>
                                         <div className="flex flex-col items-center">
-                                            <span className="text-sm text-accent mt-1">{likeCount}</span>
+                                            <span className="text-sm text-accent mt-1">{post.likeCount}</span>
                                             <button
-                                                className={`btn btn-square ${liked ? 'text-accent' : ''}`}
+                                                className={`btn btn-square ${post.liked ? 'text-accent' : ''}`}
                                                 onClick={toggleLike}
                                                 aria-label="Like post"
                                             >
@@ -205,48 +246,69 @@ export default function Post() {
                             </div>
 
                             <div className="flex-1 max-w-3xl mx-auto w-full">
-                                {isAuthor && (
-                                    <div className="flex flex-wrap justify-end gap-2 mb-4 mt-2">
-                                        <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>
-                                            {isEditing ? "Preview" : "Edit"}
-                                        </button>
-                                        <button
-                                            disabled={!chnaged}
-                                            className="btn btn-accent btn-sm"
-                                            onClick={savePost}
-                                        >
-                                            {saving ? <span className="loading loading-spinner"></span> : "Save"}
-                                        </button>
-                                        <button
-                                            className={`btn btn-sm ${published ? 'btn-error' : 'btn-success'}`}
-                                            onClick={togglePublished}
-                                        >
-                                            {publishing ? <span className="loading loading-spinner"></span> : (published ? "Unpublish" : "Publish")}
-                                        </button>
-                                        <button className="btn btn-sm btn-error" onClick={confirmDelete}>
-                                            {deleting ? <span className="loading loading-spinner"></span> : "Delete"}
-                                        </button>
+                                <div className="flex flex-wrap justify-end gap-2 mb-4 mt-2">
+                                    <div className="mb-4 flex items-center gap-2">
+                                        <div className="avatar ring-2 ring-accent rounded-full">
+                                            <div className="size-8 rounded-full">
+                                                <img src={post.author?.avatar || "/avatar404.svg"} />
+                                            </div>
+                                        </div>
+                                        <div>
+                                            {post.author ? (
+                                                <h2 className="font-semibold">{post.author.name}</h2>
+                                            ) : (
+                                                <h2 className="font-semibold text-base-content/60">Deleted Account</h2>
+                                            )}
+                                            <p className="text-xs text-base-content/60">{post.published ? displayDate : "Unpublished"}</p>
+                                        </div>
                                     </div>
-                                )}
+                                    <div className="flex-1"></div>
+                                    {(post.author?._id == user.id) && (
+                                        <>
+                                            <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>
+                                                {isEditing ? "Preview" : "Edit"}
+                                            </button>
+                                            <button
+                                                disabled={!chnaged}
+                                                className="btn btn-accent btn-sm"
+                                                onClick={savePost}
+                                            >
+                                                {saving ? <span className="loading loading-spinner"></span> : "Save"}
+                                            </button>
+                                            <button
+                                                className={`btn btn-sm ${post.published ? 'btn-error' : 'btn-success'}`}
+                                                onClick={togglePublished}
+                                            >
+                                                {publishing ? <span className="loading loading-spinner"></span> : (post.published ? "Unpublish" : "Publish")}
+                                            </button>
+                                            <button className="btn btn-sm btn-error" onClick={confirmDelete}>
+                                                {deleting ? <span className="loading loading-spinner"></span> : "Delete"}
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
 
                                 <TextareaAutosize
                                     className="outline-none text-3xl lg:text-4xl font-bold resize-none w-full"
                                     placeholder="Untitled"
                                     maxLength={75}
-                                    value={title}
-                                    readOnly={!(isEditing && isAuthor)}
+                                    value={post.title}
+                                    readOnly={!(isEditing && (post.author?._id === user.id))}
                                     onChange={(event) => {
-                                        setTitle(event.target.value)
+                                        setPost(prev => ({
+                                            ...prev,
+                                            title: event.target.value
+                                        }))
                                         setChanged(true)
                                     }}
                                 />
 
                                 <div className="mt-4 pb-16">
                                     <TTEditor
-                                        metadata={metadata}
+                                        metadata={post.metadata}
                                         setMetadata={setMetadata}
                                         setChanged={setChanged}
-                                        readOnly={!(isEditing && isAuthor)}
+                                        readOnly={!(isEditing && (post.author?._id == user.id))}
                                         placeholder="Start writing your post..."
                                     />
                                 </div>
@@ -254,10 +316,10 @@ export default function Post() {
                                 {!isEditing && (
                                     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-base-100 shadow-up-md px-4 py-2 flex items-center justify-between z-10">
                                         <button
-                                            className={`btn ${liked ? 'text-accent' : ''}`}
+                                            className={`btn ${post.liked ? 'text-accent' : ''}`}
                                             onClick={toggleLike}
                                         >
-                                            <FaFire size="1rem" /> <span className="ml-1">{likeCount}</span>
+                                            <FaFire size="1rem" /> <span className="ml-1">{post.likeCount}</span>
                                         </button>
                                         <CopyLinkButton link={window.location.href} />
                                     </div>

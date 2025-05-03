@@ -56,14 +56,14 @@ export default function Home() {
                         return (
                             <Link to={`/post/${post.id}`} key={post.id} className="bg-base-200 p-4 rounded-box">
                                 <div className="mb-4 flex items-center gap-2">
-                                    <div className="avatar border rounded-full">
+                                    <div className="avatar ring-2 ring-accent rounded-full">
                                         <div className="size-8 rounded-full">
                                             <img src={post.author?.avatar || "/avatar404.svg"} />
                                         </div>
                                     </div>
                                     <div>
                                         {post.author ? (
-                                            <h2 className="font-semibold">post.author.name</h2>
+                                            <h2 className="font-semibold">{post.author.name}</h2>
                                         ) : (
                                             <h2 className="font-semibold text-base-content/60">Deleted Account</h2>
                                         )}
