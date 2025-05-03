@@ -93,6 +93,9 @@ export default function Navbar() {
                                                 <DropdownMenuItem onClick={() => setTheme("dracula")}>
                                                     <span>Dracula</span>
                                                 </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setTheme("valentine")}>
+                                                    <span>Valentine</span>
+                                                </DropdownMenuItem>
                                             </DropdownMenuSubContent>
                                         </DropdownMenuPortal>
                                     </DropdownMenuSub>
