@@ -66,7 +66,9 @@ export default function Settings() {
     const handleAvatarChange = async (event) => {
         setUploadingAvatar(true)
         try {
+            alert("file picked")
             const file = event.target.files[0];
+            alert("is file found:", !!file)
             if (!file) return;
 
             const formData = new FormData();
