@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import TTEditor from "@/components/Editor/TTEditor"
 import { useEffect, useState } from "react"
 import TextareaAutosize from 'react-textarea-autosize'
@@ -13,6 +13,10 @@ import { FaFire } from "react-icons/fa6"
 import CopyLinkButton from "@/components/ui/CopyLinkButton"
 
 export default function Post() {
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
+    const isEditMode = queryParams.get('mode') === "edit"
+
     const { id } = useParams()
     const [metadata, setMetadata] = useState(null)
     const [title, setTitle] = useState("")
@@ -21,7 +25,7 @@ export default function Post() {
     const [saving, setSaving] = useState(false)
     const [loadingError, setLoadingError] = useState("")
     const [isAuthor, setIsAuthor] = useState(false)
-    const [isEditing, setIsEditing] = useState(false)
+    const [isEditing, setIsEditing] = useState(isEditMode)
     const { authToken, isAuthenticated } = useAuth()
     const [published, setPublished] = useState(true)
     const [publishing, setPublishing] = useState(false)

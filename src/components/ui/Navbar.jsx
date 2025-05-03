@@ -50,8 +50,7 @@ export default function Navbar() {
                 <SidebarTrigger />
                 <div className="flex-1 flex items-center gap-1">
                     <a className="flex items-center justify-center gap-1" href="/">
-                        <img alt="Logo" src="/logo.svg" className="size-10" />
-                        <h1 className="text-lg font-semibold text-accent hidden sm:block">Flamecoders</h1>
+                        <img alt="Logo" src="/logo.svg" className="size-12" />
                     </a>
                 </div>
                 <div className="flex-none">

@@ -92,13 +92,12 @@ export default function Posts() {
         if (error) {
             toast.error(error.message)
         } else {
-            navigate(`/post/${data.id}`)
+            navigate(`/post/${data.id}?mode=edit`)
         }
     }
 
     useEffect(() => {
         fetchMyPosts()
-        console.log("re fetching...")
     }, [location])
 
     return (

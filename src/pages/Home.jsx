@@ -58,11 +58,15 @@ export default function Home() {
                                 <div className="mb-4 flex items-center gap-2">
                                     <div className="avatar border rounded-full">
                                         <div className="size-8 rounded-full">
-                                            <img src={post.author.avatar} />
+                                            <img src={post.author?.avatar || "/avatar404.svg"} />
                                         </div>
                                     </div>
                                     <div>
-                                        <h2 className="font-semibold">{post.author.name}</h2>
+                                        {post.author ? (
+                                            <h2 className="font-semibold">post.author.name</h2>
+                                        ) : (
+                                            <h2 className="font-semibold text-base-content/60">Deleted Account</h2>
+                                        )}
                                         <p className="text-xs text-base-content/60">{displayDate}</p>
                                     </div>
                                 </div>
