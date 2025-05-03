@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-    themes: light, dark, cupcake, dracula, synthwave, black, valentine, sunset;
+    themes: light, dark, cupcake, sunset, night;
 }
 
 

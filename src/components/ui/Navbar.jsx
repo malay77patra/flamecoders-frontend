@@ -51,7 +51,7 @@ export default function Navbar() {
     };
 
     return (
-        <div className="bg-base-100 shadow-sm">
+        <div className="bg-base-100">
             <div className="navbar m-auto gap-2">
                 <SidebarTrigger />
                 <div className="flex-1 flex items-center gap-1">
@@ -76,7 +76,9 @@ export default function Navbar() {
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuGroup>
-                                    <DropdownMenuItem onClick={() => navigate("/settings")}>Account Settings</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => navigate("/settings")}>
+                                        <span>Account Settings</span>
+                                    </DropdownMenuItem>
                                     <DropdownMenuSub>
                                         <DropdownMenuSubTrigger>
                                             <span>Themes</span>
@@ -89,11 +91,14 @@ export default function Navbar() {
                                                 <DropdownMenuItem onClick={() => setTheme("dark")}>
                                                     <span>Dark</span>
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("dracula")}>
-                                                    <span>Dracula</span>
+                                                <DropdownMenuItem onClick={() => setTheme("cupcake")}>
+                                                    <span>Cupcake</span>
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("valentine")}>
-                                                    <span>Valentine</span>
+                                                <DropdownMenuItem onClick={() => setTheme("sunset")}>
+                                                    <span>Sunset</span>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem onClick={() => setTheme("night")}>
+                                                    <span>Night</span>
                                                 </DropdownMenuItem>
                                             </DropdownMenuSubContent>
                                         </DropdownMenuPortal>
