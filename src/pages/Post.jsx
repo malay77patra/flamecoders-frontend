@@ -55,22 +55,22 @@ export default function Post() {
         }))
     }
 
-    const [displayDate, setDisplayDate] = useState(null)
+    const [displayPublishedAt, SetdisplayPublishedAt] = useState(null)
     useEffect(() => {
         if (post.publishedAt) {
             const date = new Date(post.publishedAt)
 
             if (isToday(date) || isThisWeek(date)) {
-                setDisplayDate(formatDistanceToNow(date, { addSuffix: true }))
+                SetdisplayPublishedAt(formatDistanceToNow(date, { addSuffix: true }))
             } else {
-                setDisplayDate(date.toLocaleDateString('en-US', {
+                SetdisplayPublishedAt(date.toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                 }))
             }
         } else {
-            setDisplayDate("")
+            SetdisplayPublishedAt("")
         }
     }, [post.publishedAt])
 
@@ -246,24 +246,8 @@ export default function Post() {
                             </div>
 
                             <div className="flex-1 max-w-3xl mx-auto w-full">
-                                <div className="flex flex-wrap justify-end gap-2 mb-4 mt-2">
-                                    <div className="mb-4 flex items-center gap-2">
-                                        <div className="avatar ring-2 ring-accent rounded-full">
-                                            <div className="size-8 rounded-full">
-                                                <img src={post.author?.avatar || "/avatar404.svg"} />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            {post.author ? (
-                                                <h2 className="font-semibold">{post.author.name}</h2>
-                                            ) : (
-                                                <h2 className="font-semibold text-base-content/60">Deleted Account</h2>
-                                            )}
-                                            <p className="text-xs text-base-content/60">{post.published ? displayDate : "Unpublished"}</p>
-                                        </div>
-                                    </div>
-                                    <div className="flex-1"></div>
-                                    {(post.author?._id == user.id) && (
+                                <div className="flex flex-wrap gap-2 mb-4 mt-2">
+                                    {(post.author?._id == user.id) ? (
                                         <>
                                             <button className="btn btn-sm btn-primary" onClick={toggleIsEditing}>
                                                 {isEditing ? "Preview" : "Edit"}
@@ -284,6 +268,24 @@ export default function Post() {
                                             <button className="btn btn-sm btn-error" onClick={confirmDelete}>
                                                 {deleting ? <span className="loading loading-spinner"></span> : "Delete"}
                                             </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="mb-4 flex items-center gap-2">
+                                                <div className="avatar ring-2 ring-accent rounded-full">
+                                                    <div className="size-8 rounded-full">
+                                                        <img src={post.author?.avatar || "/avatar404.svg"} />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    {post.author ? (
+                                                        <h2 className="font-semibold">{post.author.name}</h2>
+                                                    ) : (
+                                                        <h2 className="font-semibold text-base-content/60">Deleted Account</h2>
+                                                    )}
+                                                    <p className="text-xs text-base-content/60">{post.published ? displayPublishedAt : "Unpublished"}</p>
+                                                </div>
+                                            </div>
                                         </>
                                     )}
                                 </div>
