@@ -5,7 +5,6 @@ import TextareaAutosize from 'react-textarea-autosize'
 import PageError from "@/components/ui/PageError"
 import PageLoading from "@/components/ui/PageLoading"
 import { useApi } from "@/hooks/useApi"
-import RadialLoader from "@/components/ui/RadialLoader"
 import toast from "react-hot-toast"
 import { useAuth } from "@/hooks/useAuth"
 import confirmation from "@/lib/react-hot-confirmation"
@@ -216,16 +215,16 @@ export default function Post() {
                                             className="btn btn-accent btn-sm"
                                             onClick={savePost}
                                         >
-                                            {saving ? <RadialLoader /> : "Save"}
+                                            {saving ? <span className="loading loading-spinner"></span> : "Save"}
                                         </button>
                                         <button
                                             className={`btn btn-sm ${published ? 'btn-error' : 'btn-success'}`}
                                             onClick={togglePublished}
                                         >
-                                            {publishing ? <RadialLoader /> : (published ? "Unpublish" : "Publish")}
+                                            {publishing ? <span className="loading loading-spinner"></span> : (published ? "Unpublish" : "Publish")}
                                         </button>
                                         <button className="btn btn-sm btn-error" onClick={confirmDelete}>
-                                            {deleting ? <RadialLoader /> : "Delete"}
+                                            {deleting ? <span className="loading loading-spinner"></span> : "Delete"}
                                         </button>
                                     </div>
                                 )}

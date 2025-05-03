@@ -3,7 +3,6 @@ import { useAuth } from "@/hooks/useAuth"
 import { useApi } from "@/hooks/useApi"
 import toast from "react-hot-toast"
 import { useState } from "react"
-import RadialLoader from "@/components/ui/RadialLoader"
 import { MdLogout } from "react-icons/md"
 import {
     DropdownMenu,
@@ -102,7 +101,7 @@ export default function Navbar() {
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
-                                    {loggingOut ? <RadialLoader /> : (
+                                    {loggingOut ? <span className="loading loading-spinner"></span> : (
                                         <>
                                             <MdLogout /> Logout
                                         </>

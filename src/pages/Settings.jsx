@@ -1,5 +1,4 @@
 import { useAuth } from "@/hooks/useAuth"
-import RadialLoader from "@/components/ui/RadialLoader"
 import { useApi } from "@/hooks/useApi"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -124,7 +123,7 @@ export default function Settings() {
                 </div>
                 <div className="mt-12 flex justify-end fixed bottom-0 left-0 p-2 shadow-up-md w-full sm:static sm:shadow-none">
                     <button className="btn btn-accent" type="submit" disabled={saving}>
-                        {saving ? <RadialLoader /> : "Save"}
+                        {saving ? <span className="loading loading-spinner"></span> : "Save"}
                     </button>
                 </div>
             </form>

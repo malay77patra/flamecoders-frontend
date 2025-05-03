@@ -128,7 +128,7 @@ function DropdownMenuSeparator({ className, ...props }) {
   return (
     <DropdownMenuPrimitive.Separator
       data-slot="dropdown-menu-separator"
-      className={cn("bg-base-content/50 -mx-1 my-1 h-px", className)}
+      className={cn("bg-base-content/50 -mx-1 h-px my-3", className)}
       {...props}
     />
   )

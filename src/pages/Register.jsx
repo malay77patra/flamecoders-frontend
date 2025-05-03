@@ -8,7 +8,6 @@ import { useApi } from "@/hooks/useApi";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import RadialLoader from "@/components/ui/RadialLoader";
 import { Link } from "react-router-dom";
 
 const registerSchema = yup
@@ -174,7 +173,7 @@ export default function Register() {
 
                     <div className="card-actions">
                         <button className="btn btn-primary w-full" type="submit">
-                            {isLoading ? <RadialLoader /> : "Register"}
+                            {isLoading ? <span className="loading loading-spinner"></span> : "Register"}
                         </button>
                         <Link
                             className="m-auto hover:link font-medium"
