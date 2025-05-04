@@ -146,4 +146,31 @@ body {
         @apply m-auto max-w-full p-4;
     }
 
+    blockquote {
+        @apply pl-4 border-l-[3px] my-5;
+    }
+
+    ul {
+        @apply list-disc;
+    }
+
+    ol {
+        @apply list-decimal marker:font-bold;
+      }
+
+    ul,
+    ol {
+        @apply px-4 mt-5 mb-5 mr-4 ml-[0.4rem];
+    }
+
+    ul li p,
+    ol li p {
+        @apply my-1;
+    }
+
+    a {
+        @apply cursor-pointer text-blue-600 hover:text-blue-500;
+      }
+      
+
 }
