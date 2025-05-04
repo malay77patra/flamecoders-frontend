@@ -55,12 +55,15 @@ export default function TTEditor({
       }),
       CodeBlockLowlight.configure({
         lowlight,
+        HTMLAttributes: {
+          spellcheck: 'false'
+        }
       }),
       Bold,
       Italic,
       Code.configure({
         HTMLAttributes: {
-          class: 'inline-code',
+          class: 'inline-code'
         },
       }),
       Heading.configure({

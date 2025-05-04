@@ -70,17 +70,25 @@ body {
         @apply bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono;
     }
 
+    /* fix fror code wrap  */
     pre {
-        @apply bg-base-content text-base-100 rounded-box font-mono p-2 md:p-4;
+        overflow-x: auto !important;
+        white-space: pre !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+    }
+
+    pre {
+        @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 md:p-4 border border-[#1e293b];
 
         code {
             @apply bg-none text-inherit p-0;
         }
 
-        /* Code styling */
         .hljs-comment,
         .hljs-quote {
-            color: #616161;
+            color: #64748b;
+            font-style: italic;
         }
 
         .hljs-variable,
@@ -92,7 +100,7 @@ body {
         .hljs-name,
         .hljs-selector-id,
         .hljs-selector-class {
-            color: #f98181;
+            color: #fbbf24;
         }
 
         .hljs-number,
@@ -102,23 +110,23 @@ body {
         .hljs-literal,
         .hljs-type,
         .hljs-params {
-            color: #fbbc88;
+            color: #f87171;
         }
 
         .hljs-string,
         .hljs-symbol,
         .hljs-bullet {
-            color: #b9f18d;
+            color: #4ade80;
         }
 
         .hljs-title,
         .hljs-section {
-            color: #faf594;
+            color: #a78bfa;
         }
 
         .hljs-keyword,
         .hljs-selector-tag {
-            color: #70cff8;
+            color: #60a5fa;
         }
 
         .hljs-emphasis {
@@ -130,16 +138,21 @@ body {
         }
     }
 
+
     h1 {
-        @apply text-3xl font-semibold leading-snug mb-3;
+        @apply text-3xl font-semibold leading-snug mt-12 mb-6;
     }
 
     h2 {
-        @apply text-2xl font-semibold leading-snug mb-2.5;
+        @apply text-2xl font-semibold leading-snug mt-8 mb-3;
     }
 
     h3 {
-        @apply text-xl font-medium leading-snug mb-2;
+        @apply text-xl font-medium leading-snug mt-4 mb-2;
+    }
+
+    p {
+        @apply text-base/7 mb-5;
     }
 
     img {
@@ -156,7 +169,7 @@ body {
 
     ol {
         @apply list-decimal marker:font-bold;
-      }
+    }
 
     ul,
     ol {
@@ -170,7 +183,7 @@ body {
 
     a {
         @apply cursor-pointer text-blue-600 hover:text-blue-500;
-      }
-      
+    }
+
 
 }
