@@ -79,7 +79,7 @@ body {
     }
 
     pre {
-        @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 md:p-4 border border-[#1e293b];
+        @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 my-2 md:p-4 border border-[#1e293b];
 
         code {
             @apply bg-none text-inherit p-0;
