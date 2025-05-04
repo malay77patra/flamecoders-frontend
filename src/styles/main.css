@@ -67,7 +67,7 @@ body {
     }
 
     .inline-code {
-        @apply bg-gray-100/60 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono;
+        @apply bg-base-content/20 text-error px-1.5 py-0.5 rounded text-sm font-mono;
     }
 
     /* fix fror code wrap  */
