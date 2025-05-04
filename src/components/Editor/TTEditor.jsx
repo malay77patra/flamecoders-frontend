@@ -49,7 +49,8 @@ export default function TTEditor({
       ListItem,
       BulletList,
       OrderedList,
-      Link.configure({
+      Link.extend({ inclusive: false }).configure({
+        autolink: true,
         openOnClick: false,
       }),
       CodeBlockLowlight.configure({

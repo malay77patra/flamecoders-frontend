@@ -1,11 +1,11 @@
-import { FaUndo } from "react-icons/fa";
-import { FaRedo } from "react-icons/fa";
-import { FaBold } from "react-icons/fa";
-import { FaItalic } from "react-icons/fa";
-import { FaCode } from "react-icons/fa";
-import { BsTypeH1 } from "react-icons/bs";
-import { BsTypeH2 } from "react-icons/bs";
-import { BsTypeH3 } from "react-icons/bs";
+import { FaUndo } from "react-icons/fa"
+import { FaRedo } from "react-icons/fa"
+import { FaBold } from "react-icons/fa"
+import { FaItalic } from "react-icons/fa"
+import { FaCode } from "react-icons/fa"
+import { BsTypeH1 } from "react-icons/bs"
+import { BsTypeH2 } from "react-icons/bs"
+import { BsTypeH3 } from "react-icons/bs"
 import ImageSelector from "./ImageSelector"
 import { LuTextQuote } from "react-icons/lu"
 import { FaListUl } from "react-icons/fa"
@@ -41,19 +41,19 @@ export default function ToolBar({ editor }) {
             </button>
             <div className="join">
                 <button
-                    onClick={() => editor.commands.toggleHeading({ level: 1 })}
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
                     className={`btn btn-sm btn-square join-item ${editor.isActive('heading', { level: 1 }) ? 'bg-accent' : ''}`}
                 >
                     <BsTypeH1 />
                 </button>
                 <button
-                    onClick={() => editor.commands.toggleHeading({ level: 2 })}
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                     className={`btn btn-sm btn-square join-item ${editor.isActive('heading', { level: 2 }) ? 'bg-accent' : ''}`}
                 >
                     <BsTypeH2 />
                 </button>
                 <button
-                    onClick={() => editor.commands.toggleHeading({ level: 3 })}
+                    onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
                     className={`btn btn-sm btn-square join-item ${editor.isActive('heading', { level: 3 }) ? 'bg-accent' : ''}`}
                 >
                     <BsTypeH3 />
