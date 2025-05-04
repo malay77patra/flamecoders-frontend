@@ -4,23 +4,70 @@ import toast from "react-hot-toast"
 import { useApi } from "@/hooks/useApi"
 import { useAuth } from "@/hooks/useAuth"
 
+
+function ImageGallery({ images, setImages, uploadingImage, selectedIndex, setSelectedIndex, fetching, setFetching }) {
+    const api = useApi()
+    const { authToken } = useAuth()
+
+    const fetchAllImages = async () => {
+        setFetching(true)
+        try {
+            const { error, data } = await api.get("/api/image/all", {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            })
+            if (error) {
+                toast.error(error.message)
+            } else {
+                setImages(data)
+            }
+        } catch (err) {
+            toast.error("Something went wrong")
+        } finally {
+            setFetching(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchAllImages()
+    }, [])
+
+    return (
+        <div className="flex gap-2 flex-wrap">
+            {fetching ? (
+                <span className="loading loading-spinner"></span>
+            ) : (
+                <>
+                    {uploadingImage && (<div className="size-25 flex items-center justify-center">
+                        <span className="loading loading-spinner"></span>
+                    </div>)}
+                    {images.map((img) => {
+                        return (
+                            <div className="size-25" key={img.id} onClick={() => setSelectedIndex(img.id)}>
+                                <img className={`h-full cursor-pointer w-full object-contain ${(selectedIndex === img.id) ? 'ring-3 ring-accent' : ''}`} src={img.url} />
+                            </div>
+                        )
+                    })}
+                </>
+            )}
+        </div>
+    )
+}
+
 export default function ImageSelector() {
     const [isOpen, setIsOpen] = useState(false)
     const modalref = useRef(null)
     const fileInputRef = useRef(null)
-    const [images, setImages] = useState([
-        "https://picsum.photos/id/230/300/300",
-        "https://picsum.photos/id/231/300/300",
-        "https://picsum.photos/id/232/300/300",
-        "https://picsum.photos/id/233/300/300",
-        "https://picsum.photos/id/234/300/300",
-        "https://picsum.photos/id/235/300/300",
-    ])
-    const [selectedIndex, setSelectedIndex] = useState(-1)
+    const [images, setImages] = useState([])
+    const [selectedIndex, setSelectedIndex] = useState(null)
     const [uploadError, setUploadError] = useState("")
     const [uploadingImage, setUploadingImage] = useState(false)
+    const [deletingImage, setDeletingImage] = useState(false)
+    const [fetching, setFetching] = useState(false)
     const api = useApi()
     const { authToken } = useAuth()
+    const actionDisabled = (selectedIndex === null) || fetching || deletingImage
 
     useEffect(() => {
         const modal = modalref.current
@@ -76,15 +123,37 @@ export default function ImageSelector() {
                 }
             })
             if (error) {
-                toast.error(error.message)
+                setUploadError(error.message)
             } else {
-                setImages(prev => ([data.url, ...prev]))
+                setImages(prev => ([data, ...prev]))
                 setUploadError("")
             }
         } catch (err) {
             toast.error("Something went wrong")
         } finally {
             setUploadingImage(false)
+        }
+    }
+
+    const handleDelete = async (id) => {
+        setDeletingImage(true)
+        try {
+            const { error, data } = await api.delete(`/api/image/delete/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            })
+            if (error) {
+                toast.error(error.message)
+            } else {
+                setImages(prev => prev.filter(img => img.id !== data.id))
+                setSelectedIndex(null)
+            }
+        } catch (err) {
+            console.log(err)
+            toast.error("Something went wrong")
+        } finally {
+            setDeletingImage(false)
         }
     }
 
@@ -103,23 +172,22 @@ export default function ImageSelector() {
                         }
                     }} disabled={uploadingImage}>Upload</button>
                     <p className="text-error text-xs">{uploadError}</p>
-                    <div className="flex gap-2 flex-wrap">
-                        {uploadingImage && (<div className="size-25 flex items-center justify-center">
-                            <span className="loading loading-spinner"></span>
-                        </div>)}
-                        {images.map((img, index) => {
-                            return (
-                                <div className="size-25" key={index} onClick={() => setSelectedIndex(index)}>
-                                    <img className={`h-full cursor-pointer w-full object-contain ${(selectedIndex === index) ? 'ring-3 ring-accent' : ''}`} src={img} />
-                                </div>
-                            )
-                        })}
-                    </div>
+                    {isOpen && <ImageGallery
+                        images={images}
+                        setImages={setImages}
+                        uploadingImage={uploadingImage}
+                        selectedIndex={selectedIndex}
+                        setSelectedIndex={setSelectedIndex}
+                        fetching={fetching}
+                        setFetching={setFetching}
+                    />}
                     <div className="modal-action">
-                        <button className="btn btn-success" disabled={selectedIndex === -1}>Insert</button>
-                        <button className="btn btn-error" disabled={selectedIndex === -1}>Delete</button>
+                        <button className="btn btn-success" disabled={actionDisabled}>Insert</button>
+                        <button className="btn btn-error" disabled={actionDisabled} onClick={() => handleDelete(selectedIndex)}>
+                            {deletingImage ? <span className="loading loading-spinner"></span> : "Delete"}
+                        </button>
                         <button className="btn" onClick={() => {
-                            setSelectedIndex(-1)
+                            setSelectedIndex(null)
                             setIsOpen(false)
                         }}>Close</button>
                     </div>
