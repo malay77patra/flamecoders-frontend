@@ -67,7 +67,7 @@ body {
     }
 
     .inline-code {
-        @apply bg-gray-100 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono;
+        @apply bg-gray-100/60 text-red-600 px-1.5 py-0.5 rounded text-sm font-mono;
     }
 
     /* fix fror code wrap  */
@@ -79,7 +79,7 @@ body {
     }
 
     pre {
-        @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 my-2 md:p-4 border border-[#1e293b];
+        @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 my-6 md:p-4 border border-[#1e293b];
 
         code {
             @apply bg-none text-inherit p-0;
