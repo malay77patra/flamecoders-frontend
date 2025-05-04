@@ -42,7 +42,7 @@ export default function DefaultLayout() {
                                         <CollapsibleSidebarSubMenuItem onClick={() => setTheme("cupcake")}>Cupcake</CollapsibleSidebarSubMenuItem>
                                         <CollapsibleSidebarSubMenuItem onClick={() => setTheme("sunset")}>Sunset</CollapsibleSidebarSubMenuItem>
                                         <CollapsibleSidebarSubMenuItem onClick={() => setTheme("night")}>
-                                            New <div className="badge badge-sm badge-secondary">kool</div>
+                                            Night <div className="badge badge-sm badge-secondary">Best</div>
                                         </CollapsibleSidebarSubMenuItem>
                                         <CollapsibleSidebarSubMenuItem onClick={() => setTheme("valentine")}>Valentine</CollapsibleSidebarSubMenuItem>
                                     </>
