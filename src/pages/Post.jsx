@@ -75,6 +75,10 @@ export default function Post() {
     }, [post.publishedAt])
 
     const toggleLike = async () => {
+        if(!isAuthenticated) {
+            navigate("/login")
+            return
+        }
         const { error, data } = await api.post("/api/post/like", {
             id: id
         }, {
