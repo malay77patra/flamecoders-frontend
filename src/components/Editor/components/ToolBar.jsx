@@ -56,7 +56,7 @@ export default function ToolBar({ editor }) {
                     <BsTypeH3 />
                 </button>
             </div>
-            <ImageSelector />
+            <ImageSelector editor={editor} />
         </div>
     )
 }

@@ -142,5 +142,8 @@ body {
         @apply text-xl font-medium leading-snug mb-2;
     }
 
+    img {
+        @apply m-auto max-w-full p-4;
+    }
 
 }

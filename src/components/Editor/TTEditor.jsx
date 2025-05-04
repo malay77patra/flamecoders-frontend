@@ -7,6 +7,7 @@ import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
 import Code from '@tiptap/extension-code'
 import Heading from '@tiptap/extension-heading'
+import Image from '@tiptap/extension-image'
 import { EditorContent, useEditor } from '@tiptap/react'
 import React, { useEffect } from 'react'
 import ToolBar from './components/ToolBar'
@@ -38,6 +39,7 @@ export default function TTEditor({
       Document,
       Paragraph,
       Text,
+      Image,
       CodeBlockLowlight.configure({
         lowlight,
       }),

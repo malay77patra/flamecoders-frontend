@@ -55,7 +55,7 @@ function ImageGallery({ images, setImages, uploadingImage, selectedIndex, setSel
     )
 }
 
-export default function ImageSelector() {
+export default function ImageSelector({ editor }) {
     const [isOpen, setIsOpen] = useState(false)
     const modalref = useRef(null)
     const fileInputRef = useRef(null)
@@ -182,7 +182,17 @@ export default function ImageSelector() {
                         setFetching={setFetching}
                     />}
                     <div className="modal-action">
-                        <button className="btn btn-success" disabled={actionDisabled}>Insert</button>
+                        <button className="btn btn-success" disabled={actionDisabled} onClick={() => {
+                            const selectedImage = images.find(img => img.id === selectedIndex)
+                            const selectedImageUrl = selectedImage?.url
+                            if (selectedImageUrl) {
+                                editor?.chain().focus().setImage({ src: selectedImageUrl }).run()
+                                setIsOpen(false)
+                            } else {
+                                toast.error("Selected image not found")
+                            }
+                        }}
+                        >Insert</button>
                         <button className="btn btn-error" disabled={actionDisabled} onClick={() => handleDelete(selectedIndex)}>
                             {deletingImage ? <span className="loading loading-spinner"></span> : "Delete"}
                         </button>
