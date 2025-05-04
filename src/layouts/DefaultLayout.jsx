@@ -2,10 +2,12 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from '@/components/ui/Navbar'
 import { Sidebar, SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
 import { useAuth } from '@/hooks/useAuth'
+import { useTheme } from '@/hooks/useTheme'
 
 export default function DefaultLayout() {
     const navigate = useNavigate()
     const { isAuthenticated } = useAuth()
+    const { setTheme } = useTheme()
 
     return (
         <SidebarProvider>
@@ -32,6 +34,21 @@ export default function DefaultLayout() {
                             <>
                                 <SidebarMenuItem onClick={() => navigate("/login")}>Login</SidebarMenuItem>
                                 <SidebarMenuItem onClick={() => navigate("/register")}>Register</SidebarMenuItem>
+                                <CollapsibleSidebarSubMenu items={
+                                    <>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("light")}>Light</CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("dark")}>Dark</CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("modern")}>Modern</CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("cupcake")}>Cupcake</CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("sunset")}>Sunset</CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("night")}>
+                                            Night <div className="badge badge-sm badge-secondary">kool</div>
+                                        </CollapsibleSidebarSubMenuItem>
+                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("valentine")}>Valentine</CollapsibleSidebarSubMenuItem>
+                                    </>
+                                }>
+                                    Themes
+                                </CollapsibleSidebarSubMenu>
                             </>
                         )}
                     </SidebarMenu>
