@@ -13,8 +13,8 @@
     --color-primary-content: oklch(93% 0.034 272.788);
     --color-secondary: oklch(65% 0.241 354.308);
     --color-secondary-content: oklch(94% 0.028 342.258);
-    --color-accent: oklch(0.71 0.1311 176.72);
-    --color-accent-content: oklch(0.95 0.0235 272.82);
+    --color-accent: oklch(85% .138 181.071);
+    --color-accent-content: oklch(43% .078 188.216);
     --color-neutral: oklch(14% 0.005 285.823);
     --color-neutral-content: oklch(92% 0.004 286.32);
     --color-info: oklch(74% 0.16 232.661);
@@ -39,151 +39,181 @@
     themes: night;
 }
 
-/* Custom tailwind themed variavles  */
-
 @theme {
     --font-poppins: "Poppins", "sans-serif";
 
     --shadow-up-md: 0 -1px 5px rgba(0, 0, 0, 0.2);
 }
 
-body {
-    @apply font-poppins;
-}
-
-/* Tiptap customizations  */
-.tiptap {
-    @apply border-0 outline-0;
-}
-
-.tiptap {
-    p.is-empty:nth-child(1)::before {
-        color: var(--color-base-content);
-        content: attr(data-placeholder);
-        float: left;
-        height: 0;
-        pointer-events: none;
-        opacity: 0.6;
+@layer components {
+    body {
+        @apply font-poppins;
     }
 
-    .inline-code {
-        @apply bg-base-content/20 text-error px-1.5 py-0.5 rounded text-sm font-mono;
+    /* Tiptap customizations  */
+    .tiptap {
+        @apply border-0 outline-0;
     }
 
-    /* fix fror code wrap  */
-    pre {
-        overflow-x: auto !important;
-        white-space: pre !important;
-        word-break: normal !important;
-        overflow-wrap: normal !important;
-    }
-
-    pre {
-        @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 my-6 md:p-4 border border-[#1e293b];
-
-        code {
-            @apply bg-none text-inherit p-0;
+    .tiptap {
+        p.is-empty:nth-child(1)::before {
+            color: var(--color-base-content);
+            content: attr(data-placeholder);
+            float: left;
+            height: 0;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
-        .hljs-comment,
-        .hljs-quote {
-            color: #64748b;
-            font-style: italic;
+        .inline-code {
+            @apply bg-base-content/20 text-error px-1.5 py-0.5 rounded text-sm font-mono;
         }
 
-        .hljs-variable,
-        .hljs-template-variable,
-        .hljs-attribute,
-        .hljs-tag,
-        .hljs-regexp,
-        .hljs-link,
-        .hljs-name,
-        .hljs-selector-id,
-        .hljs-selector-class {
-            color: #fbbf24;
+        /* fix fror code wrap  */
+        pre {
+            overflow-x: auto !important;
+            white-space: pre !important;
+            word-break: normal !important;
+            overflow-wrap: normal !important;
         }
 
-        .hljs-number,
-        .hljs-meta,
-        .hljs-built_in,
-        .hljs-builtin-name,
-        .hljs-literal,
-        .hljs-type,
-        .hljs-params {
-            color: #f87171;
+        pre {
+            @apply bg-[#0f172a] text-[#cfc9cb] rounded-box font-mono p-2 my-6 md:p-4 border border-[#1e293b];
+
+            code {
+                @apply bg-none text-inherit p-0;
+            }
+
+            .hljs-comment,
+            .hljs-quote {
+                color: #64748b;
+                font-style: italic;
+            }
+
+            .hljs-variable,
+            .hljs-template-variable,
+            .hljs-attribute,
+            .hljs-tag,
+            .hljs-regexp,
+            .hljs-link,
+            .hljs-name,
+            .hljs-selector-id,
+            .hljs-selector-class {
+                color: #fbbf24;
+            }
+
+            .hljs-number,
+            .hljs-meta,
+            .hljs-built_in,
+            .hljs-builtin-name,
+            .hljs-literal,
+            .hljs-type,
+            .hljs-params {
+                color: #f87171;
+            }
+
+            .hljs-string,
+            .hljs-symbol,
+            .hljs-bullet {
+                color: #4ade80;
+            }
+
+            .hljs-title,
+            .hljs-section {
+                color: #a78bfa;
+            }
+
+            .hljs-keyword,
+            .hljs-selector-tag {
+                color: #60a5fa;
+            }
+
+            .hljs-emphasis {
+                font-style: italic;
+            }
+
+            .hljs-strong {
+                font-weight: 700;
+            }
         }
 
-        .hljs-string,
-        .hljs-symbol,
-        .hljs-bullet {
-            color: #4ade80;
+        h1 {
+            @apply text-3xl font-semibold leading-snug mt-12 mb-6;
         }
 
-        .hljs-title,
-        .hljs-section {
-            color: #a78bfa;
+        h2 {
+            @apply text-2xl font-semibold leading-snug mt-8 mb-3;
         }
 
-        .hljs-keyword,
-        .hljs-selector-tag {
-            color: #60a5fa;
+        h3 {
+            @apply text-xl font-medium leading-snug mt-4 mb-2;
         }
 
-        .hljs-emphasis {
-            font-style: italic;
+        p {
+            @apply text-base/7 mb-5;
         }
 
-        .hljs-strong {
-            font-weight: 700;
+        img {
+            @apply m-auto max-w-full p-4;
         }
+
+        blockquote {
+            @apply pl-4 border-l-[3px] my-5;
+        }
+
+        ul {
+            @apply list-disc;
+        }
+
+        ol {
+            @apply list-decimal marker:font-bold;
+        }
+
+        ul,
+        ol {
+            @apply px-4 mt-5 mb-5 mr-4 ml-[0.4rem];
+        }
+
+        ul li p,
+        ol li p {
+            @apply my-1;
+        }
+
+        a {
+            @apply cursor-pointer text-blue-600 hover:text-blue-500;
+        }
+
     }
 
+    /* theme toggler  */
 
-    h1 {
-        @apply text-3xl font-semibold leading-snug mt-12 mb-6;
+    .theme-toggle svg {
+        @apply size-5;
     }
 
-    h2 {
-        @apply text-2xl font-semibold leading-snug mt-8 mb-3;
+    .theme-toggle .crkl,
+    .theme-toggle .rays {
+        transform-origin: center center;
+        transition: transform calc(500ms * .65) cubic-bezier(0, 0, 0, 1.25) calc(500ms * .35);
     }
 
-    h3 {
-        @apply text-xl font-medium leading-snug mt-4 mb-2;
+    .theme-toggle svg.active .rays {
+        transform: scale(.75);
     }
 
-    p {
-        @apply text-base/7 mb-5;
+    .theme-toggle svg.active .crkl {
+        transform: scale(1.4);
     }
 
-    img {
-        @apply m-auto max-w-full p-4;
+    .theme-toggle #theme-toggle-clip path {
+        transition-property: transform, d;
+        transition-duration: calc(500ms * .6);
+        transition-timing-function: cubic-bezier(0, 0, .5, 1);
     }
 
-    blockquote {
-        @apply pl-4 border-l-[3px] my-5;
+    .theme-toggle svg.active #theme-toggle-clip path {
+        d: path("M-9 3h25a1 1 0 0017 13v30H0Z");
+        transition-delay: calc(500ms * .4);
+        transition-timing-function: cubic-bezier(0, 0, 0, 1.25);
     }
-
-    ul {
-        @apply list-disc;
-    }
-
-    ol {
-        @apply list-decimal marker:font-bold;
-    }
-
-    ul,
-    ol {
-        @apply px-4 mt-5 mb-5 mr-4 ml-[0.4rem];
-    }
-
-    ul li p,
-    ol li p {
-        @apply my-1;
-    }
-
-    a {
-        @apply cursor-pointer text-blue-600 hover:text-blue-500;
-    }
-
-
 }

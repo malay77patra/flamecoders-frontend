@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/Dropdown"
 import { SidebarTrigger } from "@/components/ui/Sidebar"
 import { FaFire } from "react-icons/fa6"
+import ThemeToggle from "@/components/ui/ThemeToggle"
 
 export default function Navbar() {
     const [loggingOut, setLoggingOut] = useState(false);
@@ -49,15 +50,15 @@ export default function Navbar() {
         <div className="bg-base-100">
             <div className="navbar m-auto gap-2 md:p-4 border-b border-base-content/20">
                 <SidebarTrigger />
-                <div className="flex-1 flex items-center gap-1">
-                    <Link className="flex items-center justify-center gap-1 text-accent" to="/">
-                        <FaFire size="20" />
-                    </Link>
-                </div>
+                <Link className="flex items-center justify-center gap-1 text-accent" to="/">
+                    <FaFire size="20" />
+                </Link>
+                <div className="flex-1"></div>
+                <ThemeToggle />
                 <div className="flex-none">
                     {isAuthenticated ? (
                         <DropdownMenu>
-                            <DropdownMenuTrigger className="outline-none">
+                            <DropdownMenuTrigger className="outline-none rounded-full">
                                 <div className="avatar ring-2 ring-accent rounded-full cursor-pointer">
                                     <div className="size-10 rounded-full">
                                         <img src={user.avatar} />

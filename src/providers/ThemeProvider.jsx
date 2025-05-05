@@ -4,13 +4,16 @@ import { ThemeContext } from "@/contexts/ThemeContext";
 const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(() => {
         if (typeof window !== "undefined") {
-            return localStorage.getItem("theme") || "night"
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+            return localStorage.getItem("theme") || (mediaQuery.matches ? "night" : "modern")
         }
-        return "night";
+
+        // fallback
+        return "modern";
     });
 
     useEffect(() => {
-        localStorage.setItem("theme", theme || "night")
+        localStorage.setItem("theme", theme)
         document.documentElement.setAttribute("data-theme", theme)
     }, [theme])
 
