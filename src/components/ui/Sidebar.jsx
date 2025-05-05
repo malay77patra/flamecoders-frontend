@@ -30,6 +30,14 @@ export function SidebarHeader({ children }) {
     )
 }
 
+export function SidebarFooter({ children }) {
+    return (
+        <div className="p-4 pb-2">
+            {children}
+        </div>
+    )
+}
+
 export function SidebarMenu({ children }) {
 
     return (
@@ -110,7 +118,7 @@ export function CollapsibleSidebarSubMenuItem({ children, className, onClick = (
 export function SidebarContent({ children }) {
 
     return (
-        <div className="p-2">
+        <div className="p-2 flex-1">
             {children}
         </div>
     )
@@ -118,6 +126,18 @@ export function SidebarContent({ children }) {
 
 export function SidebarTrigger({ iconSize = "1.25rem" }) {
     const { toggleSidebar } = useContext(SidebarContext)
+
+    useEffect(() => {
+        const down = (e) => {
+            if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault()
+                toggleSidebar()
+            }
+        }
+
+        document.addEventListener("keydown", down)
+        return () => document.removeEventListener("keydown", down)
+    }, [])
 
     return (
         <button className='btn btn-ghost btn-square' onClick={toggleSidebar}>
@@ -154,7 +174,7 @@ export function Sidebar({ children }) {
                 <div className={`h-screen w-screen fixed top-0 left-0 z-99 flex transition-all duration-300 ${(isMobile && isOpen) ? 'bg-black/80' : 'bg-black/0'}`} onClick={toggleSidebar}></div>
             )}
             <div className={`${isMobile ? 'fixed left-0 top-0 z-100' : ''} shrink-0 h-screen bg-base-100 overflow-x-hidden transition-all duration-300 border-r border-base-content/20 flex justify-end ${isOpen ? (isMobile ? 'w-76' : 'w-64') : 'w-0'}`}>
-                <div className='w-64 shrink-0 box-border select-none'>
+                <div className='w-64 shrink-0 box-border select-none flex flex-col'>
                     {children}
                 </div>
                 {isMobile && (

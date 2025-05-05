@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from '@/components/ui/Navbar'
-import { Sidebar, SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
+import { Sidebar, SidebarProvider, SidebarHeader, SidebarFooter, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
 import { useAuth } from '@/hooks/useAuth'
 import { GoHomeFill } from "react-icons/go"
 import { FaGithub } from "react-icons/fa"
@@ -38,6 +38,9 @@ export default function DefaultLayout() {
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarContent>
+                <SidebarFooter>
+                    <span className='text-xs text-base-content/60'>© 2025 Flamecoders, MIT</span>
+                </SidebarFooter>
             </Sidebar>
             <div className='w-full'>
                 <Navbar />
