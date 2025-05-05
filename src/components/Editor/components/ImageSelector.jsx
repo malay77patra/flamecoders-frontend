@@ -159,11 +159,11 @@ export default function ImageSelector({ editor }) {
 
     return (
         <>
-            <button className="btn btn-sm btn-square" onClick={() => setIsOpen(true)}>
+            <button className="btn btn-square" onClick={() => setIsOpen(true)}>
                 <FaImage />
             </button>
-            <dialog className="modal" ref={modalref}>
-                <div className="modal-box flex flex-col gap-3 items-start">
+            <dialog className="modal" ref={modalref} onClick={() => setIsOpen(false)}>
+                <div className="modal-box flex flex-col gap-3 items-start" onClick={(e) => e.stopPropagation()}>
                     <h3 className="font-bold text-lg">Insert Image</h3>
                     <input type="file" ref={fileInputRef} className="hidden" onInput={handleUpload} />
                     <button className="btn" onClick={() => {

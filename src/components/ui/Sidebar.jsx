@@ -129,7 +129,7 @@ export function SidebarTrigger({ iconSize = "1.25rem" }) {
 
     useEffect(() => {
         const down = (e) => {
-            if (e.key === "b" && (e.metaKey || e.ctrlKey)) {
+            if (e.key === "/" && (e.metaKey || e.ctrlKey)) {
                 e.preventDefault()
                 toggleSidebar()
             }

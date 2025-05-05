@@ -16,8 +16,8 @@ function AllPosts({ posts }) {
         <ul className="py-4 flex flex-col gap-2">
             {posts.map((post) => {
                 return (
-                    <li key={post.id} className="w-full flex items-center justify-center gap-2">
-                        <Link to={`/post/${post.id}`} className="flex-1">
+                    <li key={post.id} className="w-full flex items-center justify-center gap-2 mb-4">
+                        <Link to={`/post/${post.id}?mode=edit`} className="flex-1">
                             {post.title ? (
                                 <h1 className="text-lg font-bold break-all">{post.title}</h1>
                             ) : (

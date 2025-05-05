@@ -48,9 +48,9 @@ export default function Navbar() {
 
     return (
         <div className="bg-base-100">
-            <div className="navbar m-auto gap-2 md:p-4 border-b border-base-content/20">
+            <div className="flex items-center px-4 h-16 gap-2 border-b border-base-content/20">
                 <div className="lg:tooltip lg:tooltip-right">
-                    <kbd className="kbd hidden lg:block tooltip-content">ctrl + b</kbd>
+                    <kbd className="kbd hidden lg:block tooltip-content">ctrl + /</kbd>
                     <SidebarTrigger />
                 </div>
                 <Link className="flex items-center justify-center gap-1 text-accent" to="/">

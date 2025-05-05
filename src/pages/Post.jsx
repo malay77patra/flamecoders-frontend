@@ -295,7 +295,7 @@ export default function Post() {
                                 </div>
 
                                 <TextareaAutosize
-                                    className="outline-none text-3xl lg:text-4xl font-bold resize-none w-full mb-4"
+                                    className="outline-none text-3xl lg:text-4xl font-bold resize-none w-full"
                                     placeholder="Untitled"
                                     maxLength={75}
                                     value={post.title}
