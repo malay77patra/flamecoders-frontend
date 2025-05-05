@@ -2,12 +2,13 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import Navbar from '@/components/ui/Navbar'
 import { Sidebar, SidebarProvider, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, CollapsibleSidebarSubMenu, CollapsibleSidebarSubMenuItem } from '@/components/ui/Sidebar'
 import { useAuth } from '@/hooks/useAuth'
-import { useTheme } from '@/hooks/useTheme'
+import { GoHomeFill } from "react-icons/go"
+import { FaGithub } from "react-icons/fa"
+import { TbLayoutDashboardFilled } from "react-icons/tb"
 
 export default function DefaultLayout() {
     const navigate = useNavigate()
     const { isAuthenticated } = useAuth()
-    const { setTheme } = useTheme()
 
     return (
         <SidebarProvider>
@@ -17,40 +18,24 @@ export default function DefaultLayout() {
                 </SidebarHeader>
                 <SidebarContent>
                     <SidebarMenu>
-                        <SidebarMenuItem onClick={() => navigate("/")}>Home</SidebarMenuItem>
-                        {isAuthenticated ? (
+                        <SidebarMenuItem onClick={() => navigate("/")}>
+                            <GoHomeFill /> Home
+                        </SidebarMenuItem>
+                        {isAuthenticated && (
                             <>
-                                <SidebarMenuItem onClick={() => navigate("/settings")}>Account Settings</SidebarMenuItem>
                                 <CollapsibleSidebarSubMenu items={
                                     <>
                                         <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard")}>Overview</CollapsibleSidebarSubMenuItem>
                                         <CollapsibleSidebarSubMenuItem onClick={() => navigate("/dashboard?tab=posts")}>Posts</CollapsibleSidebarSubMenuItem>
                                     </>
                                 }>
-                                    Dashboard
-                                </CollapsibleSidebarSubMenu>
-                            </>
-                        ) : (
-                            <>
-                                <SidebarMenuItem onClick={() => navigate("/login")}>Login</SidebarMenuItem>
-                                <SidebarMenuItem onClick={() => navigate("/register")}>Register</SidebarMenuItem>
-                                <CollapsibleSidebarSubMenu items={
-                                    <>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("light")}>Light</CollapsibleSidebarSubMenuItem>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("dark")}>Dark</CollapsibleSidebarSubMenuItem>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("modern")}>Modern</CollapsibleSidebarSubMenuItem>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("cupcake")}>Cupcake</CollapsibleSidebarSubMenuItem>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("sunset")}>Sunset</CollapsibleSidebarSubMenuItem>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("night")}>
-                                            Night <div className="badge badge-sm badge-secondary">Best</div>
-                                        </CollapsibleSidebarSubMenuItem>
-                                        <CollapsibleSidebarSubMenuItem onClick={() => setTheme("valentine")}>Valentine</CollapsibleSidebarSubMenuItem>
-                                    </>
-                                }>
-                                    Themes
+                                    <TbLayoutDashboardFilled /> Dashboard
                                 </CollapsibleSidebarSubMenu>
                             </>
                         )}
+                        <SidebarMenuItem to="https://github.com/malay77patra/flamecoders-frontend" isExternal={true}>
+                            <FaGithub /> Github
+                        </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarContent>
             </Sidebar>
@@ -60,6 +45,6 @@ export default function DefaultLayout() {
                     <Outlet />
                 </div>
             </div>
-        </SidebarProvider>
+        </SidebarProvider >
     );
 }

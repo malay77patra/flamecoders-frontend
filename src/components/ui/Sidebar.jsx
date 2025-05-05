@@ -3,6 +3,7 @@ import { FiSidebar } from "react-icons/fi"
 import { useIsMobile } from '@/hooks/use-mobile'
 import clsx from 'clsx'
 import { IoIosArrowForward } from "react-icons/io"
+import { useNavigate } from 'react-router-dom'
 
 const SidebarContext = createContext()
 
@@ -39,16 +40,37 @@ export function SidebarMenu({ children }) {
 }
 
 
-export function SidebarMenuItem({ children, className, onClick = () => { } }) {
-    const { toggleSidebar } = useContext(SidebarContext)
+export function SidebarMenuItem({ children, className, onClick = () => { }, to = "", isExternal = false }) {
+    const navigate = useNavigate();
+    const { toggleSidebar } = useContext(SidebarContext);
+
+    const handleClick = (e) => {
+        onClick(e);
+        toggleSidebar();
+
+        if (to) {
+            if (isExternal) {
+                window.location.href = to;
+            } else {
+                navigate(to);
+            }
+        }
+    };
+
+    const Wrapper = to ? 'a' : 'div';
+    const wrapperProps = to && isExternal ? { href: to } : {};
 
     return (
-        <li className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer flex items-center gap-2", className)} onClick={(e) => { onClick(e); toggleSidebar(); }}>
-            {children}
+        <li onClick={handleClick}>
+            <Wrapper
+                className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer flex items-center gap-2", className)}
+                {...wrapperProps}
+            >
+                {children}
+            </Wrapper>
         </li>
     );
 }
-
 
 export function CollapsibleSidebarSubMenu({ children, className, items }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -60,7 +82,7 @@ export function CollapsibleSidebarSubMenu({ children, className, items }) {
     return (
         <li>
             <div className={clsx("hover:bg-base-content/5 p-2 rounded-field cursor-pointer flex items-center", className)} onClick={toggleIsOpen}>
-                <div className="flex-1">
+                <div className="flex-1 flex items-center gap-2">
                     {children}
                 </div>
                 <IoIosArrowForward className={`transition-all duration-200 ${isOpen ? 'rotate-90' : 'rotate-0'}`} />

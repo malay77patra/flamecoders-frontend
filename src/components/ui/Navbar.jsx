@@ -12,20 +12,15 @@ import {
     DropdownMenuTrigger,
     DropdownMenuItem,
     DropdownMenuGroup,
-    DropdownMenuSub,
-    DropdownMenuSubTrigger,
-    DropdownMenuPortal,
-    DropdownMenuSubContent
 } from "@/components/ui/Dropdown"
 import { SidebarTrigger } from "@/components/ui/Sidebar"
-import { useTheme } from "@/hooks/useTheme"
+import { FaFire } from "react-icons/fa6"
 
 export default function Navbar() {
     const [loggingOut, setLoggingOut] = useState(false);
     const navigate = useNavigate();
     const { isAuthenticated, user, setUser, authToken, setAuthToken } = useAuth();
     const api = useApi()
-    const { setTheme } = useTheme()
 
     const handleLogout = async () => {
         setLoggingOut(true);
@@ -52,11 +47,11 @@ export default function Navbar() {
 
     return (
         <div className="bg-base-100">
-            <div className="navbar m-auto gap-2">
+            <div className="navbar m-auto gap-2 md:p-4 border-b border-base-content/20">
                 <SidebarTrigger />
                 <div className="flex-1 flex items-center gap-1">
-                    <Link className="flex items-center justify-center gap-1" to="/">
-                        <img alt="Logo" src="/logo.svg" className="size-12" />
+                    <Link className="flex items-center justify-center gap-1 text-accent" to="/">
+                        <FaFire size="20" />
                     </Link>
                 </div>
                 <div className="flex-none">
@@ -74,41 +69,11 @@ export default function Navbar() {
                                     <h2>{user.name}</h2>
                                     <p className="text-xs text-base-content/60">{user.email}</p>
                                 </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
+                                <div className="my-2"></div>
                                 <DropdownMenuGroup>
                                     <DropdownMenuItem onClick={() => navigate("/settings")}>
                                         <span>Account Settings</span>
                                     </DropdownMenuItem>
-                                    <DropdownMenuSub>
-                                        <DropdownMenuSubTrigger>
-                                            <span>Themes</span>
-                                        </DropdownMenuSubTrigger>
-                                        <DropdownMenuPortal>
-                                            <DropdownMenuSubContent>
-                                                <DropdownMenuItem onClick={() => setTheme("light")}>
-                                                    <span>Light</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("dark")}>
-                                                    <span>Dark</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("modern")}>
-                                                    <span>Modern</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("cupcake")}>
-                                                    <span>Cupcake</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("sunset")}>
-                                                    <span>Sunset</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("night")}>
-                                                    <span>Night</span>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => setTheme("valentine")}>
-                                                    <span>Valentine</span>
-                                                </DropdownMenuItem>
-                                            </DropdownMenuSubContent>
-                                        </DropdownMenuPortal>
-                                    </DropdownMenuSub>
                                 </DropdownMenuGroup>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem className="cursor-pointer" onClick={handleLogout}>
